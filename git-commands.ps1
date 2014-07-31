@@ -1,7 +1,12 @@
-# Nick Command Module
+# Place the lines:
+#     $githubUsername= "addusernamehere" and
+#     $githubToken = "addtokenhere"
+# in your Profile before running this script
 
 Set-Alias g git
 
+# Run the Create-Github function on an already created local git repo to create a remote
+# repo on github and push to it. (local repo must have at least 1 commit)
 function Create-Github {
     param (
         [string]$repoName
@@ -10,7 +15,7 @@ function Create-Github {
     $headers = @{
        "Accept" = "application/vnd.github.v3+json";
        "Content-Type" = "application/json";
-       "Authorization" = "token 38e271deab9cd4451c3ae26b9b97dd1133e9474b";
+       "Authorization" = ("token " + $githubToken);
     }
 
     $json = "{`"name`":`"" + $repoName + "`"}"
@@ -19,7 +24,7 @@ function Create-Github {
 
     git remote rm origin
 
-    git remote add origin ("https://github.com/nickmeldrum/" + $repoName + ".git")
+    git remote add origin ("https://github.com/" + $githubUsername + "/" + $repoName + ".git")
 
     git push -u origin master
 }
