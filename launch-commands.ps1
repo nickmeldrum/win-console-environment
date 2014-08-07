@@ -1,5 +1,3 @@
-WriteUnderlined-Host "Launch commands:"
-
 Set-Alias g git
 
 Set-Alias sublime "C:\Program Files\Sublime Text 2\sublime_text.exe"
@@ -17,13 +15,25 @@ Set-Alias mine Get-MinecraftDir
 function Reload-Profile {
     . $profile
 }
-Set-Alias c Reload-Profile
+function Echo-Profile {
+    Echo-GitCommands
+    Echo-DotnetCommands
+    Echo-LaunchCommands
+    Echo-ShellCommands
+}
 
-write-host "edit x                        | edit x in sublime text"
-write-host "mdo x                         | edit x in markdownpad"
-write-host "start chrome                  | open browser"
-write-host "explorer x                    | open windows explorer at location x"
-write-host "music                         | amazon music"
-write-host "rdp                           | remote desktop connection"
-write-host "mine                          | go to minecraft dir"
-write-host "c                             | reload this profile"
+Set-Alias rlp Reload-Profile
+Set-Alias ep Echo-Profile
+
+function Echo-LaunchCommands {
+    Write-Title "Launch commands:"
+
+    write-host "edit x                        | edit x in sublime text"
+    write-host "mdo x                         | edit x in markdownpad"
+    write-host "start chrome                  | open browser"
+    write-host "explorer x                    | open windows explorer at location x"
+    write-host "music                         | amazon music"
+    write-host "rdp                           | remote desktop connection"
+    write-host "mine                          | go to minecraft dir"
+    write-host "rlp, ep                       | reload this profile, echo profile commands"
+}

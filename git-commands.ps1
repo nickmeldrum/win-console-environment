@@ -1,5 +1,3 @@
-WriteUnderlined-Host "Git commands:"
-
 # Place the lines:
 #     $githubUsername= "addusernamehere" and
 #     $githubToken = "addtokenhere"
@@ -40,17 +38,18 @@ function AddAndCommit-Git {
   git log -1
 }
 
-write-host "g ad                          | git add -A"
-write-host "g st                          | git status"
-write-host "g cm                          | git commit -v -m `"`""
-write-host "acg x                         | add and commit with message x"
-write-host "Create-Github x               | create a repo on github called x, make it the remote origin and push to it"
-write-host "git push -u origin master     | push master branch up to github"
-write-host "git checkout -b x             | create a new branch x and move to it"
-write-host "rebase workflow:"
-write-host "ends up with clean linear history even when events happened in parallel"
-write-host "do not rebase commits pushed to public repo!"
-write-host "git rebase master             | take the changes committed on master and replay them over current branch"
-write-host "git merge --no-ff x           | take the changes committed on x and merge them into current branch (with a merge commit)"
-write-host "Remember: " -NoNewLine
-write-host "http://nvie.com/posts/a-successful-git-branching-model/" -ForegroundColor magenta
+function Echo-GitCommands {
+  Write-Title "Git commands:"
+
+  write-host "g st, g ad, g cm `"msg`"        | git status, stage everything, commit with msg"
+  write-host "acg `"msg`"                     | add and commit with msg"
+  write-host "Create-Github x               | create a repo on github called x, make it the remote origin and push to it"
+  write-host "git push -u origin master     | push master branch up to github"
+  write-host "git checkout -b x             | create a new branch x and move to it"
+  write-host "rebase workflow: ends up with clean linear history even when events happened in parallel"
+  write-host "do not rebase commits pushed to public repo!"
+  write-host "git rebase master             | take the changes committed on master and replay them over current branch"
+  write-host "git merge --no-ff x           | take the changes committed on x and merge them into current branch (with a merge commit)"
+  write-host "Remember: " -NoNewLine
+  write-host "http://nvie.com/posts/a-successful-git-branching-model/" -ForegroundColor magenta
+}

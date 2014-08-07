@@ -1,17 +1,13 @@
-function WriteUnderlined-Host {
+function Write-Title {
 	param (
 		[string]$message
 	)
 
-    write-host
 	write-host $message -ForegroundColor cyan
-	write-host ("=" * $message.Length) -ForegroundColor darkcyan
 }
 
-WriteUnderlined-Host "Shell Commands and useful commands to remember:"
-
 function List-Colors {
-    WriteUnderlined-Host "Powershell console colors:"
+    Write-Title "Powershell console colors:"
 
     write-host " | White: " -nonewline
     write-host "White" -ForegroundColor White -nonewline
@@ -73,8 +69,11 @@ function Copy-CurDirToClipboard {
 
 Set-Alias copydir Copy-CurDirToClipboard
 
-write-host "copycon x y                   | Create a text file with the filename x and text y"
-write-host "Move-AllItemsToParentDir      | Does what it says on the tin (and deletes current dir!)"
-write-host "x | clip                      | copy to clipboard"
-write-host "copydir                       | copy current dir to clipboard"
-write-host "pushd and popd                | push and pop directories from stack"
+function Echo-ShellCommands {
+    Write-Title "Shell Commands and useful commands to remember:"
+
+    write-host "copycon x y                   | Create a text file with the filename x and text y"
+    write-host "Move-Al ItemsToParentDir      | Does what it says on the tin (and deletes current dir!)"
+    write-host "x | clip, copydir             | copy to clipboard, copy current directory"
+    write-host "pushd and popd                | push and pop directories from stack"    
+}

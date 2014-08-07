@@ -13,3 +13,4 @@ Import-Module "PowerTab" -ArgumentList "C:\Users\Nick\Documents\WindowsPowerShel
 
 c:
 cd \users\nick\src\current
+ep # this command exists in launch-commands.ps1
