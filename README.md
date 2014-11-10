@@ -39,4 +39,8 @@ How to configure these productivity scripts for your environment:
 
 
 
-You now have
+TODO: 
+beyond compare and git hookup
+sublime text powershell and vintage stuff
+
+
