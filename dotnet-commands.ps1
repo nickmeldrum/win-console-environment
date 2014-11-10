@@ -1,5 +1,6 @@
 #Set environment variables for Visual Studio Command Prompt
-pushd 'c:\Program Files (x86)\Microsoft Visual Studio 11.0\VC'
+pushd 'c:\Program Files (x86)\Microsoft Visual Studio 12.0\VC'
+
 cmd /c "vcvarsall.bat&set" |
 foreach {
   if ($_ -match "=") {
@@ -13,7 +14,7 @@ $msbuildPathData = reg.exe query "HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions\
 $msbuildPath = (($msbuildpathData[2] -split "\s+")[3]).Trim()
 write-host $msbuildPath -ForegroundColor magenta
 
-Set-Alias vs "C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\devenv.exe"
+Set-Alias vs "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe"
 Set-Alias msbuild ($msbuildPath + "\msbuild.exe")
 
 function Echo-DotnetCommands {

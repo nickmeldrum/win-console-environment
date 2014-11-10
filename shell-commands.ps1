@@ -6,6 +6,18 @@ function Write-Title {
 	write-host $message -ForegroundColor cyan
 }
 
+function Get-Time {
+    cmd /c time /t
+}
+
+function Write-Subtitle {
+    param (
+        [string]$message
+    )
+
+    Write-Host $message -ForegroundColor DarkCyan
+}
+
 function List-Colors {
     Write-Title "Powershell console colors:"
 
@@ -49,7 +61,7 @@ function List-Colors {
 # For when you've cloned into a directory with the same name as parent directory
 # creating a folder heirachy pointlessly deep argh
 function Move-AllItemsToParentDir {
-
+    throw [System.NotImplementedException]
 }
 
 function Create-TextFile {
@@ -72,8 +84,38 @@ Set-Alias copydir Copy-CurDirToClipboard
 function Echo-ShellCommands {
     Write-Title "Shell Commands and useful commands to remember:"
 
-    write-host "copycon x y                   | Create a text file with the filename x and text y"
-    write-host "Move-Al ItemsToParentDir      | Does what it says on the tin (and deletes current dir!)"
-    write-host "x | clip, copydir             | copy to clipboard, copy current directory"
-    write-host "pushd and popd                | push and pop directories from stack"    
+    Write-Host "copycon x y                             | Create a text file with the filename x and text y"
+    Write-Host "Move-Al ItemsToParentDir                | Does what it says on the tin (and deletes current dir!)"
+    Write-Host "x | clip, copydir                       | copy to clipboard, copy current directory"
+    Write-Host "pushd and popd                          | push and pop directories from stack"    
+    Write-Host "Show-Time                               | output current time"
 }
+
+function Echo-VimCommands {
+    Write-Title "Vim commands:"
+
+    Write-Subtitle "Moving around file:"
+    Write-Host ":n or ngg                               | Goto line n"
+
+    Write-Subtitle "Search and replace:"
+    Write-Host "/search                                 | Search in file for text"
+    Write-Host "/search/e                               | Search in file for text and place cursor at end of search text"
+    Write-Host "?search                                 | Search backwards in file for text"
+    Write-Host "n                                       | Repeat search"
+    Write-Host "N                                       | Repeat search backwards"
+    Write-Host ":s/search/replace/                      | Search and replace in line and replace 1st match"
+    Write-Host ":8,10 s/search/replace/g                | Search and replace each match in range (line numbers)"
+    Write-Host ":'<,'>s/search/search/g                 | Search and replace each match in range selected via visual mode (visually select range then hit :)"
+    Write-Host ":%s/search/replace/g                    | Search and replace globally in whole file"
+
+    Write-Subtitle "Swapping text:"
+    Write-Host "xp                                      | Swap the current character (the character under the cursor) with the next"
+    Write-Host "Xp                                      | Swap the current character with the previous"
+    Write-Host "dawwP                                   | Swap the current word with the next"
+    Write-Host "dawbP                                   | Swap the current word with the previous"    
+    Write-Host "ddp                                     | Swap the current line with the next"
+    Write-Host "ddkP                                    | Swap the current line with the previous"    
+}
+
+Set-Alias echovim Echo-VimCommands
+

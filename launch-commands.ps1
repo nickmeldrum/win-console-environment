@@ -16,10 +16,13 @@ function Reload-Profile {
     . $profile
 }
 function Echo-Profile {
+    Echo-VimCommands
     Echo-GitCommands
     Echo-DotnetCommands
+    Echo-SystemCommands
     Echo-LaunchCommands
     Echo-ShellCommands
+    Echo-ScribestarCommands
 }
 
 Set-Alias rlp Reload-Profile
