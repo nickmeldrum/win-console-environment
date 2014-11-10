@@ -28,7 +28,10 @@ Setting up your git config:
          cm = commit -v -m
         [pull]
          rebase = true
-
+[diff]
+	tool = bc3
+[difftool "bc3"]
+	path = c:/Program Files (x86)/Beyond Compare 3/bcomp.exe
 
 How to configure these productivity scripts for your environment:
 
