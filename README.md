@@ -26,6 +26,12 @@ Setting up your git config:
         [alias]
          st = status
          cm = commit -v -m
+         ad = add -A
+         br = branch
+         unstage = reset HEAD --
+         last = log -1 HEAD
+ [branch]
+         autosetuprebase = always         
         [pull]
          rebase = true
 [diff]
