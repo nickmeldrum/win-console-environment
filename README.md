@@ -36,6 +36,8 @@ Setting up your git config:
 	tool = bc3
 [mergetool "bc3"]
 	path = c:/Program Files (x86)/Beyond Compare 3/bcomp.exe
+[push]
+	default = simple
 
 How to configure these productivity scripts for your environment:
 
