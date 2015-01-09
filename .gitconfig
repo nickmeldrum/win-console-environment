@@ -22,3 +22,6 @@
 	path = c:/Program Files (x86)/Beyond Compare 3/bcomp.exe
 [push]
 	default = simple
+[credential]
+	helper = !'C:\\Users\\nick.meldrum\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
+	
