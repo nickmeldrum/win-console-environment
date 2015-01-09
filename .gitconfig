@@ -1,0 +1,24 @@
+[user] 
+  name = Nick Meldrum
+  email = nick@nickmeldrum.com
+[alias]
+  st = status
+  cm = commit -v -m
+  ad = add -A
+  br = branch
+  unstage = reset HEAD --
+  last = log -1 HEAD
+[branch]
+  autosetuprebase = always         
+[pull]
+  rebase = true
+[diff]
+	tool = bc3
+[difftool "bc3"]
+	path = c:/Program Files (x86)/Beyond Compare 3/bcomp.exe
+[merge]
+	tool = bc3
+[mergetool "bc3"]
+	path = c:/Program Files (x86)/Beyond Compare 3/bcomp.exe
+[push]
+	default = simple
