@@ -11,11 +11,12 @@ The minimal setup for ConEmu:
 
 1. Startup | Tasks: Bump {PowerShell (Admin)} to no. 1 in the list
 2. Startup: Set the "Specified named task" to be "{Powershell (Admin)}"
-3. Main: Set the Main console font size to 14 and the font to "Consolas"
+3. Main: Set the Main console font size to 16 and the font to "Consolas"
 4. Main | Appearance: Check "Hide caption when maximized"
 5. Main | Confirm: Uncheck everything!
 6. Features | Colors: Set Standard colors no. 7. to 0, 255, 0 (green)
 7. Set ConEmu shortcut to "pin to taskbar", right click | properties | advanced... and check "Run as administrator"
+8. Main Tabs: Tabs: Auto show
 
 Setting up your git config:
 
