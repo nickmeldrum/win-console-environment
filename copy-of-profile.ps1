@@ -2,7 +2,7 @@ $env:PSModulePath = $env:PSModulePath + ";D:\Work\env\3rdparty"
 
 Import-Module "PowerTab" -ArgumentList "C:\Users\nick.meldrum\Documents\WindowsPowerShell\PowerTabConfig.xml"
 
-. 'D:\Work\env\posh-git\profile.example.ps1'
+. 'D:\Work\env\3rdparty\posh-git\profile.example.ps1'
 . 'D:\Work\env\shell-commands.ps1'
 . 'D:\Work\env\git-commands.ps1'
 . 'D:\Work\env\system-commands.ps1'
