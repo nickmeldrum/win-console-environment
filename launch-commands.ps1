@@ -3,7 +3,7 @@ Set-Alias g git
 Set-Alias sublime "C:\Program Files\Sublime Text 2\sublime_text.exe"
 Set-Alias edit "C:\Program Files\Sublime Text 2\sublime_text.exe"
 Set-Alias mdo "C:\Program Files (x86)\MarkdownPad 2\MarkdownPad2.exe"
-Set-Alias music "C:\Users\Nick\AppData\Local\Amazon Music\Amazon Music.exe"
+Set-Alias music "C:\Users\nick.meldrum\AppData\Local\Amazon Music\Amazon Music.exe"
 Set-Alias rdp "mstsc.exe"
 
 function Get-MinecraftDir {
@@ -11,6 +11,15 @@ function Get-MinecraftDir {
     cd c:\users\nick\appdata\roaming\.minecraft\saves
 }
 Set-Alias mine Get-MinecraftDir
+
+function Google {
+    Start chrome "https://www.google.co.uk/#q=`"$args`""
+}
+
+function EditorKarma {
+    sseditordir
+    karma start
+}
 
 function Reload-Profile {
     . $profile
@@ -39,4 +48,5 @@ function Echo-LaunchCommands {
     write-host "rdp                           | remote desktop connection"
     write-host "mine                          | go to minecraft dir"
     write-host "rlp, ep                       | reload this profile, echo profile commands"
+    write-host "(curl -uri `"www.etsy.com`").content > page.html | vim page.html | get html contents of page and load that file into vim"
 }

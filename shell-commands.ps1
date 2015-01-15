@@ -79,6 +79,39 @@ function Copy-CurDirToClipboard {
     $pwd.Path | clip
 }
 
+function JsGrep {
+    param (
+        [string]$text
+    )
+
+    grep -i -n -r $text *.js .
+}
+
+function SSEditorDir {
+    cd "C:\work\product\instance\ScribeStar.Web\scripts\editor"
+}
+
+function SSRootDir {
+    cd "C:\work\product\instance"
+}
+
+function sw {
+    return [system.diagnostics.stopwatch]::startNew();
+}
+
+function alarm {
+    param (
+            [int]$period,
+            [string]$message
+          )
+    $sw = sw
+    $sw.reset()
+    $sw.start()
+    while ($sw.elapsed.minutes –lt $period) {$null};
+    [System.Windows.Forms.MessageBox]::Show($message, "Alarum") 
+    $sw.stop()
+}
+
 Set-Alias copydir Copy-CurDirToClipboard
 
 function Echo-ShellCommands {
@@ -115,6 +148,61 @@ function Echo-VimCommands {
     Write-Host "dawbP                                   | Swap the current word with the previous"    
     Write-Host "ddp                                     | Swap the current line with the next"
     Write-Host "ddkP                                    | Swap the current line with the previous"    
+
+
+    Write-Host "Vim shortcuts"
+
+    Write-Host "Help"
+    Write-Host ":help command will open up vim help in a split about that command"
+
+    Write-Host "Splits"
+    Write-Host ":sp or ctrl-w n or v to create a new split normal or vertical"
+    Write-Host "ctrl-w <dir> move between splits"
+    Write-Host "ZQ or ZZ close current window either saving or not saving respectively"
+    Write-Host "ctrl-w q close current split"
+    Write-Host ":on or ctrl-w o make current window the only visible window"
+
+    Write-Host "Opening files"
+    Write-Host ":new"
+    Write-Host ":edit"
+    Write-Host ":tabe"
+    Write-Host ":find **\Dom** find any file with Dom at the start of the name and open it"
+
+    Write-Host "Tabs"
+    Write-Host ":tabe or :tabnew file open a file in a new tab (edit or new)"
+    Write-Host ":tabf for find a file and open in new tab"
+    Write-Host ":tabn or gt goto next tab"
+    Write-Host ":tabp or :tabN for previous and next tab"
+    Write-Host ":tabc tabclose"
+    Write-Host ":tabo close all other tabs"
+
+    Write-Host "quitting"
+    Write-Host ":q! quit without saving (or close current tab)"
+    Write-Host ":wq write and quit"
+    Write-Host ":w write with optional filename"
+
+    Write-Host "cut copy paste"
+    Write-Host "v visual mode"
+    Write-Host "shift-v select whole lines"
+    Write-Host "ctrl-v select columns"
+
+    Write-Host "y yank"
+    Write-Host "x cut (yank and delete)"
+    Write-Host "p put"
+    Write-Host "`"<n>y store the yank in buffer n"
+    Write-Host "`"* is the special clipboard buffer" 
+
+    Write-Host "Macros"
+    Write-Host "q<n> start recording into buffer n"
+    Write-Host "@<n> replay recording in buffer n"
+
+    Write-Host "Working Directory"
+    Write-Host ":pwd display it"
+    Write-Host ":cd %:p:h set pwd to current files dir"
+
+    Write-Host ":noh turn off last search highlighting"
+    Write-Host ":source ~/.vimrc reload vimrc without restarting vim"
+
 }
 
 Set-Alias echovim Echo-VimCommands
