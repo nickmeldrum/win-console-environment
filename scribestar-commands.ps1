@@ -158,6 +158,20 @@ function Compass-Compile
     compass compile --css-dir "c:\Work\Product\Instance\ScribeStar.Web\Content" --sass-dir "c:\Work\Product\Instance\ScribeStar.Web\sass" --sourcemap --output-style expanded
 }
 
+
+function SSEditorDir {
+    cd "D:\work\product\instance\ScribeStar.Web\scripts\editor"
+}
+
+function SSRootDir {
+    cd "D:\work\product\instance"
+}
+
+function EditorKarma {
+    sseditordir
+    karma start
+}
+
 #function Update-ActualSiteCss {
 #    $folder = 'D:\Work\Product\instance\scribestar.web\sass'
 #    $filter = 'site.css'
