@@ -28,7 +28,7 @@ function List-ScribeStarServiceStatus {
 function Build-ScribeStarSolution
 {
     stopss
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "D:\Work\Product\ScribeStar.Instance.sln" /t:build
+    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "C:\Work\Product\ScribeStar.Instance.sln" /t:build
 }
 
 function Run-Nunit {
@@ -160,11 +160,11 @@ function Compass-Compile
 
 
 function SSEditorDir {
-    cd "D:\work\product\instance\ScribeStar.Web\scripts\editor"
+    cd "C:\work\product\instance\ScribeStar.Web\scripts\editor"
 }
 
 function SSRootDir {
-    cd "D:\work\product\instance"
+    cd "C:\work\product\instance"
 }
 
 function EditorKarma {
