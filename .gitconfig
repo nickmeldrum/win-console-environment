@@ -1,5 +1,6 @@
 [user] 
   name = Nick Meldrum
+   #email = nick.meldrum@scribestar.com
   email = nick@nickmeldrum.com
 [alias]
   st = status
