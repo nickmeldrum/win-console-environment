@@ -9,9 +9,9 @@ function Stop-ScribeStarServices {
 }
 
 function Start-ScribeStarConsoleServices {
-    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "D:\Work\Product\instance\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
+    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "D:\Work\Product\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
     Start-ProcessIfNotRunning "ScribeStar.Document.Service" "D:\Work\Product\instance\ScribeStar.Document.Service\bin\Debug\ScribeStar.Document.Service.exe"
-    #Start-ProcessIfNotRunning "ScribeStar.Transaction.Service" "D:\Work\Product\instance\ScribeStar.Transaction.Service\bin\Debug\ScribeStar.Transaction.Service.exe"
+    #Start-ProcessIfNotRunning "ScribeStar.Transaction.Service" "D:\Work\Product\src\ScribeStar.Transaction.Service\bin\Debug\ScribeStar.Transaction.Service.exe"
 }
 
 function Stop-ScribeStarConsoleServices {
@@ -131,7 +131,7 @@ function Rebuild-ScribeStarSolution()
     startss
 }
 
-function Debug-Instance
+function Debug-Web
 {
     vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar.Instance"}).ProcessId
 }
@@ -154,17 +154,17 @@ function Make-DevCert
 
 function Compass-Compile
 {
-    del c:\Work\Product\Instance\ScribeStar.Web\Content\site.css -force
-    compass compile --css-dir "c:\Work\Product\Instance\ScribeStar.Web\Content" --sass-dir "c:\Work\Product\Instance\ScribeStar.Web\sass" --sourcemap --output-style expanded
+    del c:\Work\Product\src\ScribeStar.Web\Content\site.css -force
+    compass compile --css-dir "c:\Work\Product\src\ScribeStar.Web\Content" --sass-dir "c:\Work\Product\src\ScribeStar.Web\sass" --sourcemap --output-style expanded
 }
 
 
 function SSEditorDir {
-    cd "C:\work\product\instance\ScribeStar.Web\scripts\editor"
+    cd "C:\work\product\src\ScribeStar.Web\scripts\editor"
 }
 
 function SSRootDir {
-    cd "C:\work\product\instance"
+    cd "C:\work\product"
 }
 
 function EditorKarma {
@@ -173,7 +173,7 @@ function EditorKarma {
 }
 
 #function Update-ActualSiteCss {
-#    $folder = 'D:\Work\Product\instance\scribestar.web\sass'
+#    $folder = 'D:\Work\Product\src\scribestar.web\sass'
 #    $filter = 'site.css'
 #     
 #    $fsw = New-Object IO.FileSystemWatcher $folder, $filter -Property @{IncludeSubdirectories = $false;NotifyFilter = [IO.NotifyFilters]'FileName, LastWrite'}
@@ -185,8 +185,8 @@ function EditorKarma {
 
 #        #Out-File -FilePath d:\work\scratch\UpdateActualSiteCss.log -Append -InputObject "The file '$name' was $changeType at $timeStamp"
 
-#        copy D:\Work\Product\instance\scribestar.web\sass\site.css D:\Work\Product\instance\ScribeStar.Web\content\site.css
-#        del D:\Work\Product\instance\scribestar.web\sass\site.css
+#        copy D:\Work\Product\src\scribestar.web\sass\site.css D:\Work\Product\src\ScribeStar.Web\content\site.css
+#        del D:\Work\Product\src\scribestar.web\sass\site.css
 #    }  
 
 
@@ -197,12 +197,12 @@ function EditorKarma {
 #        
 #        #Out-File -FilePath d:\work\scratch\UpdateActualSiteCss.log -Append -InputObject "The file '$name' was $changeType at $timeStamp"
 
-#        copy D:\Work\Product\instance\scribestar.web\sass\site.css D:\Work\Product\instance\ScribeStar.Web\content\site.css
-#        del D:\Work\Product\instance\scribestar.web\sass\site.css
+#        copy D:\Work\Product\src\scribestar.web\sass\site.css D:\Work\Product\src\ScribeStar.Web\content\site.css
+#        del D:\Work\Product\src\scribestar.web\sass\site.css
 
 #    } 
 
-#    write-host "compass watch --css-dir instance\scribestar.web\sass --sass-dir instance\scribestar.web\sass\styles --output-style expanded"
+#    write-host "compass watch --css-dir src\scribestar.web\sass --sass-dir src\scribestar.web\sass\styles --output-style expanded"
 #}
 
 
@@ -212,7 +212,7 @@ Set-Alias startssc Start-ScribeStarConsoleServices
 Set-Alias stopssc Stop-ScribeStarConsoleServices
 Set-Alias listss List-ScribeStarServiceStatus
 Set-Alias rebuild Rebuild-ScribeStarSolution
-Set-Alias debugweb Debug-Instance
+Set-Alias debugweb Debug-Web
 Set-Alias debugcentral Debug-CentralService
 Set-Alias debugdoc Debug-DocumentService
 
@@ -225,10 +225,10 @@ function Echo-ScribestarCommands {
     Write-Host "startssc                                | Start ScribeStar Services as console host (Notification, Document and Transaction)"
     Write-Host "listss                                  | List ScribeStar Services to see if they are running as services or console (Notification, Document and Transaction)"
     Write-host "rebuild                                 | Rebuild ScribeStar Solutions"
-    Write-host "debugweb                                | Debug ScribeStar Instance"
+    Write-host "debugweb                                | Debug ScribeStar Web"
     Write-host "debugdoc                                | Debug ScribeStar Document Service"
     Write-host "Compass-Compile                         | o 0"
-    Write-host "Build-ScribeStarSolution                | Just do a debug guild of instance.sln"
+    Write-host "Build-ScribeStarSolution                | Just do a debug build of instance.sln"
     Write-host "Test-Instance                           | nunit test all of ScribeStar.Instance.Tests"
     Write-host "Test-InstanceAndWeb                     | nunit test ScribeStar.Instance.Tests and ScribeStar.Instance.Web.Tests"
     Write-host "Test-Importer                           | nunit test just Word Importer namespace"
@@ -237,5 +237,5 @@ function Echo-ScribestarCommands {
     Write-host "Test-DocumentAndChangeset               | nunit test ScribeStar.Document.Tests and ScribeStar.Document.Changeset.Tests"
     Write-host "Test-CentralAndCore                     | nunit test ScribeStar.Central.Tests and ScribeStar.Core.Tests"
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
-    Write-Host "gci D:\Work\Product\instance\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
+    Write-Host "gci D:\Work\Product\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
 }

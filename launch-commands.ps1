@@ -18,7 +18,8 @@ function Google {
 
 function EditorKarma {
     sseditordir
-    karma start
+    node .\node_modules\karma\bin\karma start
+    #karma start
 }
 
 function Reload-Profile {
