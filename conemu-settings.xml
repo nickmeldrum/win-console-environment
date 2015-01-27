@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
 	<key name="ConEmu">
-		<key name=".Vanilla" modified="2015-01-15 21:23:11" build="140814">
+		<key name=".Vanilla" modified="2015-01-27 11:00:28" build="140814">
 			<value name="StartType" type="hex" data="02"/>
 			<value name="CmdLine" type="string" data=""/>
 			<value name="StartTasksFile" type="string" data=""/>
@@ -86,7 +86,7 @@
 			<value name="StoreTaskbarkTasks" type="hex" data="00"/>
 			<value name="StoreTaskbarCommands" type="hex" data="00"/>
 			<value name="SaveCmdHistory" type="hex" data="01"/>
-			<value name="CmdLineHistory" type="multi"><line data="{karma}"/><line data="{vim}"/></value>
+			<value name="CmdLineHistory" type="multi"><line data="{jsproj-mousejs}"/><line data="{jsproj} /c dir C:\Work\nickmeldrum\mousejs"/><line data="{karma}"/><line data="{jsproj} /dir &quot;C:\Work\nickmeldrum\mousejs&quot;"/><line data="{jsproj}"/><line data="{vim}"/></value>
 			<value name="SingleInstance" type="hex" data="00"/>
 			<value name="ShowHelpTooltips" type="hex" data="01"/>
 			<value name="Multi" type="hex" data="01"/>
@@ -138,11 +138,11 @@
 			<value name="ColorKeyValue" type="dword" data="00010101"/>
 			<value name="UseCurrentSizePos" type="hex" data="01"/>
 			<value name="WindowMode" type="dword" data="00000520"/>
-			<value name="ConWnd Width" type="dword" data="00000050"/>
-			<value name="ConWnd Height" type="dword" data="00000019"/>
+			<value name="ConWnd Width" type="dword" data="00000068"/>
+			<value name="ConWnd Height" type="dword" data="00000031"/>
 			<value name="Cascaded" type="hex" data="01"/>
-			<value name="ConWnd X" type="dword" data="fffffff8"/>
-			<value name="ConWnd Y" type="dword" data="000000d5"/>
+			<value name="ConWnd X" type="dword" data="fffffa65"/>
+			<value name="ConWnd Y" type="dword" data="0000003e"/>
 			<value name="16bit Height" type="dword" data="00000000"/>
 			<value name="AutoSaveSizePos" type="hex" data="00"/>
 			<value name="IntegralSize" type="hex" data="00"/>
@@ -547,9 +547,9 @@
 			<value name="DndLKey" type="hex" data="00"/>
 			<value name="DndRKey" type="hex" data="a2"/>
 			<value name="WndDragKey" type="dword" data="00121101"/>
-			<key name="Tasks" modified="2015-01-15 21:23:12" build="140814">
-				<value name="Count" type="dword" data="0000000c"/>
-				<key name="Task1" modified="2015-01-15 21:23:12" build="140814">
+			<key name="Tasks" modified="2015-01-27 11:00:29" build="140814">
+				<value name="Count" type="dword" data="0000000d"/>
+				<key name="Task1" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{PowerShell (Admin)}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -558,16 +558,19 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task2" modified="2015-01-15 21:23:12" build="140814">
-					<value name="Name" type="string" data="{karma}"/>
+				<key name="Task2" modified="2015-01-27 11:00:29" build="140814">
+					<value name="Name" type="string" data="{jsproj-mousejs}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
-					<value name="GuiArgs" type="string" data=""/>
-					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;Karma&quot;:d:&quot;C:\Work\Product\instance\ScribeStar.Web\Scripts\Editor&quot; -command editorkarma"/>
+					<value name="GuiArgs" type="string" data="/dir c:\work\nickmeldrum\mousejs"/>
+					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;git/ cmd&quot; -noexit"/>
 					<value name="Active" type="dword" data="00000000"/>
-					<value name="Count" type="dword" data="00000001"/>
+					<value name="Count" type="dword" data="00000004"/>
+					<value name="Cmd2" type="string" data="powershell.exe -new_console:a:t:&quot;vim&quot; -noprofile -command vim"/>
+					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;tests&quot; -noprofile -noexit -command &quot;npm test&quot;"/>
+					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;http-server&quot; -noprofile -noexit -command &quot;npm start&quot;"/>
 				</key>
-				<key name="Task3" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task3" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{vim}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -576,7 +579,16 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task4" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task4" modified="2015-01-27 11:00:29" build="140814">
+					<value name="Name" type="string" data="{karma}"/>
+					<value name="Flags" type="dword" data="00000000"/>
+					<value name="Hotkey" type="dword" data="00000000"/>
+					<value name="GuiArgs" type="string" data=""/>
+					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;Karma&quot;:d:&quot;C:\Work\Product\instance\ScribeStar.Web\Scripts\Editor&quot; -command editorkarma"/>
+					<value name="Active" type="dword" data="00000000"/>
+					<value name="Count" type="dword" data="00000001"/>
+				</key>
+				<key name="Task5" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{cmd}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -585,7 +597,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task5" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task6" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{cmd (Admin)}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -594,26 +606,27 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task6" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task7" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{PowerShell}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
 					<value name="GuiArgs" type="string" data=""/>
 					<value name="Cmd1" type="string" data="%SystemRoot%\system32\WindowsPowerShell\v1.0\PowerShell.exe"/>
+					<value name="Cmd2" type="string" data="set PROMPT=$E[93m$P$E[90m$G$E[m$S &amp; &quot;%windir%\syswow64\cmd.exe&quot; /k ver &amp; echo This is 32 bit cmd.exe -new_console:s50V"/>
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task7" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task8" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{cmd 64/32}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
 					<value name="GuiArgs" type="string" data=""/>
 					<value name="Cmd1" type="string" data="&gt; set PROMPT=$E[92m$P$E[90m$G$E[m$S &amp; &quot;%windir%\system32\cmd.exe&quot; /k ver &amp; echo This is Native cmd.exe"/>
-					<value name="Cmd2" type="string" data="set PROMPT=$E[93m$P$E[90m$G$E[m$S &amp; &quot;%windir%\syswow64\cmd.exe&quot; /k ver &amp; echo This is 32 bit cmd.exe -new_console:s50V"/>
 					<value name="Active" type="dword" data="00000001"/>
 					<value name="Count" type="dword" data="00000002"/>
+					<value name="Cmd2" type="string" data="set PROMPT=$E[93m$P$E[90m$G$E[m$S &amp; &quot;%windir%\syswow64\cmd.exe&quot; /k ver &amp; echo This is 32 bit cmd.exe -new_console:s50V"/>
 				</key>
-				<key name="Task8" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task9" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{Git bash}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -622,7 +635,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task9" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task10" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{Git bash}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -631,7 +644,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task10" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task11" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{bash}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -640,7 +653,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task11" modified="2015-01-15 21:23:12" build="140814">
+				<key name="Task12" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{Show ANSI colors}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -649,9 +662,8 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task12" modified="2015-01-15 21:23:12" build="140814">
+						<key name="Task13" modified="2015-01-27 11:00:29" build="140814">
 					<value name="Name" type="string" data="{Chocolatey (Admin)}"/>
-					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
 					<value name="GuiArgs" type="string" data=""/>
 					<value name="Cmd1" type="string" data="*cmd /k Title Chocolatey &amp; &quot;%ConEmuBaseDir%\Addons\ChocolateyAbout.cmd&quot;"/>
@@ -659,10 +671,10 @@
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
 			</key>
-			<key name="Apps" modified="2015-01-15 21:23:12" build="140814">
+			<key name="Apps" modified="2015-01-27 11:00:29" build="140814">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
-			<key name="Colors" modified="2015-01-15 21:23:12" build="140814">
+			<key name="Colors" modified="2015-01-27 11:00:29" build="140814">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
 			<value name="Key.PicViewSlide" type="dword" data="80808013"/>
