@@ -202,7 +202,9 @@ function Echo-VimCommands {
 
     Write-Host ":noh turn off last search highlighting"
     Write-Host ":source ~/.vimrc reload vimrc without restarting vim"
-
+    Write-Host "dab `"delete arounb brackets`", daB for around curly brackets, t for xml type tags, combinations with normal commands are as expected cib/yaB/dit/vat etc"
+    Write-Host ":earlier 15m :later n - revert the document to a time in the past (later moves it back forward)"
+    Write-Host ":.! ls - dump output from command into editor"
 }
 
 Set-Alias echovim Echo-VimCommands
