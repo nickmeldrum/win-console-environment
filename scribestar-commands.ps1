@@ -33,34 +33,31 @@ function Build-ScribeStarSolution
 
 function Run-Nunit {
     param (
-        $assemblies,
+        [string[]]$assemblies,
         [string]$spec
     )
 
-    $nunitPath = "C:\Program Files (x86)\NUnit 2.6.3\bin\nunit-console.exe"
+    $nunitPath = "`"C:\Program Files (x86)\NUnit 2.6.4\bin\nunit-console.exe`""
 
     if ($assemblies -eq $null -or $assemblies.Count -eq 0) {
         Throw "you must include an assembly!"
     }
 
-    if ($assemblies.Count -eq 1) {
-        $argList = @($assemblies.Value)
-    }
-    else {
-        $argList = $assemblies.Values        
-    }
+    $argList = $assemblies -join " "
 
     if (![string]::IsNullOrWhitespace($spec)) {
-        $argList = $argList += "/run=$spec"
+        $argList = $argList += " /run=$spec"
     }
 
-    $argList = $argList += "/output=Off"
+    $argList = $argList += " /output=test-output.xml"
 
-    echo "Nunit arguments:"
+    echo "============================================"
+    echo "Nunit command:"
     echo $argList
     echo "============================================"
 
-    &$nunitPath $argList
+    $command = $nunitPath + $argList
+    iex "& $command"
 }
 
 function Get-NunitAsmList {
@@ -72,20 +69,22 @@ function Get-NunitAsmList {
     $asmConfigPath = "bin\Debug\"
 
     $testAssemblies = @{
-        "Central" = $rootPath + "central\ScribeStar.Central.Tests\" + $asmConfigPath + "ScribeStar.Central.Tests.dll";
-        "Changeset" = $rootPath + "instance\ScribeStar.Document.Changeset.Tests\" + $asmConfigPath + "ScribeStar.Document.Changeset.Tests.dll";
-        "Document" = $rootPath + "Instance\ScribeStar.Document.Tests\" + $asmConfigPath + "ScribeStar.Document.Tests.dll";
-        "Core" = $rootPath + "shared\ScribeStar.Core.Tests\" + $asmConfigPath + "ScribeStar.Core.Tests.dll";
-        "Messages" = $rootPath + "shared\ScribeStar.Messages.Tests\" + $asmConfigPath + "ScribeStar.Messages.Tests.dll";
-        "Instance" = $rootPath + "instance\UnitTests\" + $asmConfigPath + "ScribeStar.Instance.Tests.dll";
-        "Web" = $rootPath + "instance\ScribeStar.Web.Tests\" + $asmConfigPath + "ScribeStar.Instance.Web.Tests.dll";
+        "DocService" = $rootPath + "instance\ScribeStar.Document.Service.Tests\" + $asmConfigPath + "ScribeStar.Document.Service.Tests.dll";
+        "Doc" = $rootPath + "instance\ScribeStar.Document.Tests\" + $asmConfigPath + "ScribeStar.Document.Tests.dll";
+        "Browser" = $rootPath + "src\Scribestar.AutomatedTests\bin\ScribeStar.AutomatedTests.dll";
+        "Client" = $rootPath + "src\ScribeStar.Client\" + $asmConfigPath + "ScribeStar.Client.dll";
+        "Shared" = $rootPath + "src\ScribeStar.Shared.Tests\" + $asmConfigPath + "ScribeStar.Shared.Tests.dll";
+        "Tests" = $rootPath + "src\ScribeStar.Tests\" + $asmConfigPath + "ScribeStar.Tests.dll";
+        "Web" = $rootPath + "src\ScribeStar.Web.Tests\" + $asmConfigPath + "ScribeStar.Instance.Web.Tests.dll";
     }
 
     if ($asmKeys -eq $null -or $asmKeys.Count -eq 0) {
         return $testAssemblies
     }
     else {
-        return $testAssemblies.getEnumerator() | where Name -in $asmKeys
+        $outputArray = @()
+        $testAssemblies.getEnumerator() | where Name -in $asmKeys | % { $outputArray += $_.Value }
+        return $outputArray
     }
 }
 
@@ -93,34 +92,24 @@ function Test-WholeSuite {
     Run-Nunit (Get-NunitAsmList)
 }
 
-function Test-DocumentAndChangeset {
-    $asmList = Get-NunitAsmList @("Changeset", "Document")
+function Test-AllExceptBrowser {
+    $asmList = Get-NunitAsmList @("DocService", "Doc", "Client", "Shared", "Tests", "Web")
     Run-Nunit $asmList
 }
 
-function Test-CentralAndCore {
-    $asmList = Get-NunitAsmList @("Central", "Core")
+function Test-DocStuff {
+    $asmList = Get-NunitAsmList @("DocService", "Doc")
     Run-Nunit $asmList
 }
 
-function Test-Messages {
-    $asmList = Get-NunitAsmList @("Messages")
-    Run-Nunit $asmList
+function Test-SystemIntegration {
+    $asmList = Get-NunitAsmList @("DocService")
+    Run-Nunit $asmList "ScribeStar.Document.Service.Tests.SystemIntegrationTests"
 }
 
-function Test-InstanceAndWeb {
-    $asmList = Get-NunitAsmList @("Instance", "Web")
-    Run-Nunit $asmList
-}
-
-function Test-Instance {
-    $asmList = Get-NunitAsmList @("Instance")
-    Run-Nunit $asmList
-}
-
-function Test-Importer {
-    $asmList = Get-NunitAsmList @("Instance")
-    Run-Nunit $asmList "ScribeStar.Instance.Tests.Document.WordImporter" 
+function Test-Importers {
+    $asmList = Get-NunitAsmList @("DocService")
+    Run-Nunit $asmList "ScribeStar.Document.Service.Tests.WordImporter.Importers"
 }
 
 function Rebuild-ScribeStarSolution()
@@ -133,7 +122,7 @@ function Rebuild-ScribeStarSolution()
 
 function Debug-Web
 {
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar.Instance"}).ProcessId
+    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "IIS APPPOOL\Scribestar"}).ProcessId
 }
 
 function Debug-CentralService
@@ -169,7 +158,7 @@ function SSRootDir {
 
 function EditorKarma {
     sseditordir
-    karma start
+    node node_modules\karma\bin\karma start
 }
 
 #function Update-ActualSiteCss {
@@ -211,9 +200,9 @@ Set-Alias stopss Stop-ScribeStarServices
 Set-Alias startssc Start-ScribeStarConsoleServices
 Set-Alias stopssc Stop-ScribeStarConsoleServices
 Set-Alias listss List-ScribeStarServiceStatus
+Set-Alias build Build-ScribeStarSolution
 Set-Alias rebuild Rebuild-ScribeStarSolution
 Set-Alias debugweb Debug-Web
-Set-Alias debugcentral Debug-CentralService
 Set-Alias debugdoc Debug-DocumentService
 
 function Echo-ScribestarCommands {
@@ -224,18 +213,19 @@ function Echo-ScribestarCommands {
     Write-Host "stopssc                                 | Stop ScribeStar Services as console host (Notification, Document and Transaction)"
     Write-Host "startssc                                | Start ScribeStar Services as console host (Notification, Document and Transaction)"
     Write-Host "listss                                  | List ScribeStar Services to see if they are running as services or console (Notification, Document and Transaction)"
+    Write-host "build                                   | Build ScribeStar Solutions"
     Write-host "rebuild                                 | Rebuild ScribeStar Solutions"
     Write-host "debugweb                                | Debug ScribeStar Web"
     Write-host "debugdoc                                | Debug ScribeStar Document Service"
     Write-host "Compass-Compile                         | o 0"
     Write-host "Build-ScribeStarSolution                | Just do a debug build of instance.sln"
-    Write-host "Test-Instance                           | nunit test all of ScribeStar.Instance.Tests"
-    Write-host "Test-InstanceAndWeb                     | nunit test ScribeStar.Instance.Tests and ScribeStar.Instance.Web.Tests"
-    Write-host "Test-Importer                           | nunit test just Word Importer namespace"
-    Write-host "Test-Messages                           | nunit test ScribeStar.Messages.Tests"
-    Write-host "Test-WholeSuite                         | nunit test the kitchen sink"
-    Write-host "Test-DocumentAndChangeset               | nunit test ScribeStar.Document.Tests and ScribeStar.Document.Changeset.Tests"
-    Write-host "Test-CentralAndCore                     | nunit test ScribeStar.Central.Tests and ScribeStar.Core.Tests"
+    Write-host "Get-NunitAsmList                        | List all tests assemblies to pass into Run-Nunit"
+    Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit (Get-NunitAsmList @(`"DocService`", `"Doc`")) `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
+    Write-host "Test-WholeSuite                         | nunit test everything including selenium stuff"
+    Write-host "Test-AllExceptBrowser                   | nunit test everything except selenium stuff"
+    Write-host "Test-DocStuff                           | nunit test DocumentService and Document"
+    Write-host "Test-SystemIntegration                  | nunit test ScribeStar.Document.Service.Tests.SystemIntegrationTests namespace in DocService"
+    Write-host "Test-Importers                          | nunit test ScribeStar.Document.Service.Tests.WordImporter.Importers namespace in DocService"
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
     Write-Host "gci D:\Work\Product\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
 }
