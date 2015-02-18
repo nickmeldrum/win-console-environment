@@ -9,15 +9,11 @@ function Stop-ScribeStarServices {
 }
 
 function Start-ScribeStarConsoleServices {
-    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "D:\Work\Product\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
-    Start-ProcessIfNotRunning "ScribeStar.Document.Service" "D:\Work\Product\instance\ScribeStar.Document.Service\bin\Debug\ScribeStar.Document.Service.exe"
-    #Start-ProcessIfNotRunning "ScribeStar.Transaction.Service" "D:\Work\Product\src\ScribeStar.Transaction.Service\bin\Debug\ScribeStar.Transaction.Service.exe"
+    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "C:\Work\Product\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
 }
 
 function Stop-ScribeStarConsoleServices {
     Stop-ProcessIfStarted "ScribeStar.Notifications.Service"
-    Stop-ProcessIfStarted "ScribeStar.Document.Service"
-    #Stop-ProcessIfStarted "ScribeStar.Transaction.Service"
 }
 
 function List-ScribeStarServiceStatus {
@@ -73,19 +69,21 @@ function Get-NunitAsmList {
         "Doc" = $rootPath + "instance\ScribeStar.Document.Tests\" + $asmConfigPath + "ScribeStar.Document.Tests.dll";
         "Browser" = $rootPath + "src\Scribestar.AutomatedTests\bin\ScribeStar.AutomatedTests.dll";
         "Client" = $rootPath + "src\ScribeStar.Client\" + $asmConfigPath + "ScribeStar.Client.dll";
-        "Shared" = $rootPath + "src\ScribeStar.Shared.Tests\" + $asmConfigPath + "ScribeStar.Shared.Tests.dll";
+        "Shared" = $rootPath + "src\ScribeStar.Shared.Tests\" + $asmConfigPath + "ScribeStar.Core.Tests.dll";
         "Tests" = $rootPath + "src\ScribeStar.Tests\" + $asmConfigPath + "ScribeStar.Tests.dll";
-        "Web" = $rootPath + "src\ScribeStar.Web.Tests\" + $asmConfigPath + "ScribeStar.Instance.Web.Tests.dll";
+        "Web" = $rootPath + "src\ScribeStar.Web.Tests\" + $asmConfigPath + "ScribeStar.Web.Tests.dll";
     }
 
+    $outputArray = @()
+
     if ($asmKeys -eq $null -or $asmKeys.Count -eq 0) {
-        return $testAssemblies
+        $testAssemblies.getEnumerator() | % { $outputArray += $_.Value }
     }
     else {
-        $outputArray = @()
         $testAssemblies.getEnumerator() | where Name -in $asmKeys | % { $outputArray += $_.Value }
-        return $outputArray
     }
+
+    return $outputArray
 }
 
 function Test-WholeSuite {
@@ -122,17 +120,17 @@ function Rebuild-ScribeStarSolution()
 
 function Debug-Web
 {
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "IIS APPPOOL\Scribestar"}).ProcessId
+    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar"}).ProcessId
 }
 
-function Debug-CentralService
+function Debug-WebApi
 {
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar.CentralService"}).ProcessId
+    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar.WebApi"}).ProcessId
 }
 
-function Debug-DocumentService
+function Debug-NotificationsService
 {
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "ScribeStar.Document.Service.exe"}).ProcessId
+    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "ScribeStar.Notifications.Service.exe"}).ProcessId
 }
 
 function Make-DevCert
@@ -202,8 +200,6 @@ Set-Alias stopssc Stop-ScribeStarConsoleServices
 Set-Alias listss List-ScribeStarServiceStatus
 Set-Alias build Build-ScribeStarSolution
 Set-Alias rebuild Rebuild-ScribeStarSolution
-Set-Alias debugweb Debug-Web
-Set-Alias debugdoc Debug-DocumentService
 
 function Echo-ScribestarCommands {
     Write-Title "Scribestar Commands:"
@@ -215,10 +211,11 @@ function Echo-ScribestarCommands {
     Write-Host "listss                                  | List ScribeStar Services to see if they are running as services or console (Notification, Document and Transaction)"
     Write-host "build                                   | Build ScribeStar Solutions"
     Write-host "rebuild                                 | Rebuild ScribeStar Solutions"
-    Write-host "debugweb                                | Debug ScribeStar Web"
-    Write-host "debugdoc                                | Debug ScribeStar Document Service"
+    Write-host "debug-web or debug-webapi               | Debug ScribeStar Web or web api"
+    Write-host "Debug-NotificationsService              | Debug notifications service or console"
     Write-host "Compass-Compile                         | o 0"
-    Write-host "Build-ScribeStarSolution                | Just do a debug build of instance.sln"
+    Write-host "sseditordir ssrootdir                   | move to directories in solution"
+    Write-host "editorkarma                             | run editor karma"
     Write-host "Get-NunitAsmList                        | List all tests assemblies to pass into Run-Nunit"
     Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit (Get-NunitAsmList @(`"DocService`", `"Doc`")) `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
     Write-host "Test-WholeSuite                         | nunit test everything including selenium stuff"
@@ -229,3 +226,4 @@ function Echo-ScribestarCommands {
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
     Write-Host "gci D:\Work\Product\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
 }
+

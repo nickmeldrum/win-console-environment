@@ -104,6 +104,7 @@ function alarm {
             [int]$period,
             [string]$message
           )
+    echo "alarm set for $period minutes with msg [$message]"
     $sw = sw
     $sw.reset()
     $sw.start()
