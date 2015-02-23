@@ -45,7 +45,7 @@ function Run-Nunit {
         $argList = $argList += " /run=$spec"
     }
 
-    $argList = $argList += " /output=test-output.xml"
+#$argList = $argList += " /output=test-output.xml"
 
     echo "============================================"
     echo "Nunit command:"

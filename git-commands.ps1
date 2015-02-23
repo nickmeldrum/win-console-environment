@@ -46,9 +46,18 @@ function Get-PrettyLog {
     git log -$length --pretty=format:'%C(yellow)%h %Cred%ad %C(yellow)%an%Cgreen%d %Creset%s' --date=short
 }
 
+function Get-PrettyLogForFile {
+    param (
+        [string]$file
+    )
+
+    g log --follow --pretty=format:'%C(yellow)%h %Cred%ad %C(yellow)%an%Cgreen%d %Creset%s' --date=short $file
+}
+
 Set-Alias g git
 Set-Alias acg AddAndCommit-Git
 Set-Alias log Get-PrettyLog
+Set-Alias glogfile Get-PrettyLogForFile
 
 function Echo-GitCommands {
   Write-Title "Git commands:"
