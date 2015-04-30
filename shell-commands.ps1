@@ -6,6 +6,9 @@ function Write-Title {
 	write-host $message -ForegroundColor cyan
 }
 
+function Get-ModuleVerbs {
+    get-verb | sort verb | format-wide -property verb -column 8
+}
 function Get-Time {
     cmd /c time /t
 }
@@ -17,6 +20,12 @@ function Write-Subtitle {
 
     Write-Host $message -ForegroundColor DarkCyan
 }
+
+function Kill-Node {
+    get-process "node" | kill
+}
+
+Set-Alias killnode Kill-Node
 
 function List-Colors {
     Write-Title "Powershell console colors:"
