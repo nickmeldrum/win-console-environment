@@ -1,6 +1,6 @@
 # Place the lines:
-#     $githubUsername= "addusernamehere" and
-#     $githubToken = "addtokenhere"
+#     $githubUsername= "username"
+#     $githubToken = "apptoken"
 # in your Profile before running this script
 
 # Run the Create-Github function on an already created local git repo to create a remote
@@ -12,18 +12,59 @@ function Create-Github {
     )
 
     $headers = @{
-       "Accept" = "application/vnd.github.v3+json";
-       "Content-Type" = "application/json";
-       "Authorization" = ("token " + $githubToken);
+        "Accept" = "application/vnd.github.v3+json";
+        "Content-Type" = "application/json";
+        "Authorization" = ("token " + $githubToken);
     }
 
     $json = "{`"name`":`"" + $repoName + "`"}"
 
-    Invoke-WebRequest -Uri https://api.github.com/user/repos -Headers $headers -Method Post -Body $json
-    git remote rm origin
-    git remote add origin ("https://github.com/" + $githubUsername + "/" + $repoName + ".git")
-    git push -u origin master
+    CreateRemoteRepo-AndPush "https://api.github.com/user/repos" "https://github.com/$githubUsername/$repoName.git" $headers $json
 }
+
+function Create-PrivateBitbucket {
+    param ([string]$repoName)
+
+    Create-Bitbucket $repoName "true"
+}
+
+function Create-PublicBitbucket {
+    param ([string]$repoName)
+
+    Create-Bitbucket $repoName "false"
+}
+
+function Create-Bitbucket {
+    param (
+        [string]$repoName,
+        [string]$isPrivate
+    )
+
+    $headers = @{
+        "Content-Type" = "application/x-www-form-urlencoded; charset=UTF-8";
+        "Authorization" = ("Basic " + $bitbucketToken);
+    }
+
+    $body = "name=$repoName&is_private=$isPrivate&scm=git&fork_policy=allow_forks"
+
+    CreateRemoteRepo-AndPush "https://bitbucket.org/api/2.0/repositories/nickmeldrum/$repoName" "https://$bitbucketUsername@bitbucket.org/$bitbucketUsername/$repoName.git" $headers $body
+}
+
+function CreateRemoteRepo-AndPush {
+    param (
+        [string]$remoteRestUrl,
+        [string]$remoteGitUrl,
+        $headers,
+        [string]$body
+    )
+
+    Invoke-WebRequest -Uri $remoteRestUrl -Headers $headers -Method Post -Body $body
+    git remote rm origin
+    git remote add origin $remoteGitUrl 
+    git push -u origin --all
+    git push -u origin --tags
+}
+
 
 function AddAndCommit-Git {
   param (
@@ -44,6 +85,17 @@ function Get-PrettyLog {
     }
 
     git log -$length --pretty=format:'%C(yellow)%h %Cred%ad %C(yellow)%an%Cgreen%d %Creset%s' --date=short
+}
+
+function Get-SpecificBlame {
+    param (
+        $file,
+        $hash,
+        $startLine,
+        $numberOfLines
+    )
+    
+    g blame -c -L "$startLine,+$numberOfLines" "$hash^" -- $file
 }
 
 function Get-PrettyLogForFile {
@@ -69,6 +121,7 @@ function Echo-GitCommands {
   Write-Host "git push -u origin master               | push master branch up to github"
   Write-Host "git checkout -b x                       | create a new branch x and move to it"
   Write-Host "git checkout --track origin/x           | create a local branch tracking a remote branch x"
+  Write-Host "g push origin --delete b                | delete remote branch b"
   Write-Host "g checkout -- x                         | undo unstaged changes to file x"
   Write-Host "log x                                   | Get-PrettyLog x - show pretty oneline git log x defaults to 5"
   Write-Host "git reset HEAD x                        | undo staged changes to file x"
