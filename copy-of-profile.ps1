@@ -1,5 +1,11 @@
 $env:PSModulePath = $env:PSModulePath + ";D:\Work\env\3rdparty"
 
+$githubUsername= "username"
+$githubToken = "apptoken"
+
+$bitbucketUsername= "username"
+$bitbucketToken = "apptoken"
+
 Import-Module "PowerTab" -ArgumentList "C:\Users\nick.meldrum\Documents\WindowsPowerShell\PowerTabConfig.xml"
 
 . 'D:\Work\env\3rdparty\posh-git\profile.example.ps1'

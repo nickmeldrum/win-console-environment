@@ -27,7 +27,7 @@ How to setup your environment in Windows for a lovely console powershell/git/vim
 4. Setup Vim:
 	1. Copy the .vimrc file from this repo into your %HOMEDIR%/ ~/ $HOME (e.g. C:\users\username on Windows 7 etc.)
 	2. Create a .vim folder in your %HOMEDIR%/ ~/ $HOME
-	3. Git clone https://github.com/gmarik/Vundle.vim.git in the .vim folder
+	3. Git clone https://github.com/gmarik/Vundle.vim.git in the .vim/bundle folder
 	4. Ensure Vim is in the path (from the git install, typically: C:\Program Files (x86)\Git\share\vim\vim74)
 	4. Load up vim and load the plugins by :PluginInstall
 
