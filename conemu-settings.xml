@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
 	<key name="ConEmu">
-		<key name=".Vanilla" modified="2015-02-24 07:35:06" build="140814">
-			<value name="StartType" type="hex" data="02"/>
+		<key name=".Vanilla" modified="2015-05-26 21:18:23" build="140814">
+			<value name="StartType" type="hex" data="00"/>
 			<value name="CmdLine" type="string" data=""/>
 			<value name="StartTasksFile" type="string" data=""/>
 			<value name="StartTasksName" type="string" data="{cmd/ git}"/>
@@ -86,7 +86,7 @@
 			<value name="StoreTaskbarkTasks" type="hex" data="00"/>
 			<value name="StoreTaskbarCommands" type="hex" data="00"/>
 			<value name="SaveCmdHistory" type="hex" data="01"/>
-			<value name="CmdLineHistory" type="multi"><line data="{jsproj-mousejs}"/><line data="{cmd/ git}"/><line data="{scribestar}"/><line data="{vim}"/><line data="{PowerShell (Admin)}"/><line data="{jsproj} /c dir C:\Work\nickmeldrum\mousejs"/><line data="{karma}"/><line data="{jsproj} /dir &quot;C:\Work\nickmeldrum\mousejs&quot;"/><line data="{jsproj}"/></value>
+			<value name="CmdLineHistory" type="multi"><line data="{cmd}"/><line data="{vim}"/><line data="{npmapp}"/><line data="{scribestar}"/><line data="{jsproj-mousejs}"/><line data="{cmd/ git}"/><line data="{PowerShell}"/><line data="{PowerShell (Admin)}"/><line data="{jsproj} /c dir C:\Work\nickmeldrum\mousejs"/><line data="{karma}"/><line data="{jsproj} /dir &quot;C:\Work\nickmeldrum\mousejs&quot;"/><line data="{jsproj}"/></value>
 			<value name="SingleInstance" type="hex" data="00"/>
 			<value name="ShowHelpTooltips" type="hex" data="01"/>
 			<value name="Multi" type="hex" data="01"/>
@@ -141,8 +141,8 @@
 			<value name="ConWnd Width" type="dword" data="0000004a"/>
 			<value name="ConWnd Height" type="dword" data="00000020"/>
 			<value name="Cascaded" type="hex" data="01"/>
-			<value name="ConWnd X" type="dword" data="fffffade"/>
-			<value name="ConWnd Y" type="dword" data="0000007e"/>
+			<value name="ConWnd X" type="dword" data="fffffff8"/>
+			<value name="ConWnd Y" type="dword" data="00000049"/>
 			<value name="16bit Height" type="dword" data="00000000"/>
 			<value name="AutoSaveSizePos" type="hex" data="00"/>
 			<value name="IntegralSize" type="hex" data="00"/>
@@ -547,30 +547,42 @@
 			<value name="DndLKey" type="hex" data="00"/>
 			<value name="DndRKey" type="hex" data="a2"/>
 			<value name="WndDragKey" type="dword" data="00121101"/>
-			<key name="Tasks" modified="2015-02-24 07:35:07" build="140814">
-				<value name="Count" type="dword" data="0000000e"/>
-				<key name="Task1" modified="2015-02-24 07:35:07" build="140814">
-					<value name="Name" type="string" data="{cmd/ git}"/>
+			<key name="Tasks" modified="2015-05-26 21:18:24" build="140814">
+				<value name="Count" type="dword" data="00000005"/>
+				<key name="Task1" modified="2015-05-26 21:18:24" build="140814">
+					<value name="Name" type="string" data="{cmd}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="005b114e"/>
-					<value name="GuiArgs" type="string" data=""/>
-					<value name="Cmd1" type="string" data="%SystemRoot%\system32\WindowsPowerShell\v1.0\PowerShell.exe -new_console:a:t:&quot;cmd/git&quot;"/>
+					<value name="GuiArgs" type="string" data="/dir C:\Work"/>
+					<value name="Cmd1" type="string" data="%SystemRoot%\system32\WindowsPowerShell\v1.0\PowerShell.exe -new_console:a:t:&quot;cmd&quot;"/>
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task2" modified="2015-02-24 07:35:07" build="140814">
+				<key name="Task2" modified="2015-05-26 21:18:24" build="140814">
 					<value name="Name" type="string" data="{vim}"/>
 					<value name="Flags" type="dword" data="00000000"/>
-					<value name="Hotkey" type="dword" data="00000000"/>
-					<value name="GuiArgs" type="string" data=""/>
-					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;vim&quot;:d:&quot;C:\Work\Product&quot; -noprofile -command vim"/>
+					<value name="Hotkey" type="dword" data="005b1156"/>
+					<value name="GuiArgs" type="string" data="/dir C:\Work"/>
+					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;vim&quot;:d:&quot;C:\Work&quot; -noprofile -command vim"/>
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 					<value name="Cmd2" type="string" data="powershell.exe -new_console:a:t:&quot;vim&quot; -noprofile -command vim"/>
 					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;tests&quot; -noprofile -noexit -command &quot;npm test&quot;"/>
 					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;http-server&quot; -noprofile -noexit -command &quot;npm start&quot;"/>
 				</key>
-				<key name="Task3" modified="2015-02-24 07:35:07" build="140814">
+				<key name="Task3" modified="2015-05-26 21:18:24" build="140814">
+					<value name="Name" type="string" data="{cmd (no profile)}"/>
+					<value name="Flags" type="dword" data="00000000"/>
+					<value name="Hotkey" type="dword" data="005b1150"/>
+					<value name="GuiArgs" type="string" data="/dir C:\Work"/>
+					<value name="Cmd1" type="string" data="%SystemRoot%\system32\WindowsPowerShell\v1.0\PowerShell.exe -noprofile -new_console:a:t:&quot;cmd (noprofile)&quot;"/>
+					<value name="Active" type="dword" data="00000000"/>
+					<value name="Count" type="dword" data="00000001"/>
+					<value name="Cmd2" type="string" data="&gt;powershell.exe -new_console:a:t:&quot;vim&quot; -noprofile -noexit -command vim"/>
+					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;client tests&quot; -noexit -command &quot;editorkarma&quot;"/>
+					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;server tests&quot; -noexit -command &quot;test-allexceptbrowser&quot;"/>
+				</key>
+				<key name="Task4" modified="2015-05-26 21:18:24" build="140814">
 					<value name="Name" type="string" data="{scribestar}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -579,30 +591,20 @@
 					<value name="Active" type="dword" data="00000002"/>
 					<value name="Count" type="dword" data="00000004"/>
 					<value name="Cmd2" type="string" data="&gt;powershell.exe -new_console:a:t:&quot;vim&quot; -noprofile -noexit -command vim"/>
-					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;client tests&quot; -noexit -command &quot;editorkarma&quot;"/>
+					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;client build&quot; -noexit -command &quot;gulp watch&quot;"/>
 					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;server tests&quot; -noexit -command &quot;test-allexceptbrowser&quot;"/>
-				</key>
-				<key name="Task4" modified="2015-02-24 07:35:07" build="140814">
-					<value name="Name" type="string" data="{jsproj-mousejs}"/>
-					<value name="Flags" type="dword" data="00000000"/>
-					<value name="Hotkey" type="dword" data="00000000"/>
-					<value name="GuiArgs" type="string" data="/dir c:\work\nickmeldrum\mousejs"/>
-					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;git/ cmd&quot; -noexit"/>
-					<value name="Active" type="dword" data="00000002"/>
-					<value name="Count" type="dword" data="00000005"/>
-					<value name="Cmd2" type="string" data="&gt;powershell.exe -new_console:a:t:&quot;vim&quot; -noprofile -noexit -command vim"/>
-					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;tests&quot; -noprofile -noexit -command &quot;npm test&quot;"/>
-					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;http-server&quot; -noprofile -noexit -command &quot;npm start&quot;"/>
 					<value name="Cmd5" type="string" data="powershell.exe -new_console:a:t:&quot;sass-watch&quot; -noprofile -noexit -command &quot;.\sass.cmd&quot;"/>
 				</key>
-				<key name="Task5" modified="2015-02-24 07:35:07" build="140814">
-					<value name="Name" type="string" data="{karma}"/>
+				<key name="Task5" modified="2015-05-26 21:18:24" build="140814">
+					<value name="Name" type="string" data="{npmapp}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
-					<value name="GuiArgs" type="string" data=""/>
-					<value name="Cmd1" type="string" data="powershell.exe -new_console:a:t:&quot;Karma&quot;:d:&quot;C:\Work\Product\instance\ScribeStar.Web\Scripts\Editor&quot; -command editorkarma"/>
-					<value name="Active" type="dword" data="00000000"/>
-					<value name="Count" type="dword" data="00000001"/>
+					<value name="GuiArgs" type="string" data="/dir c:\work\nickmeldrum\ajax"/>
+					<value name="Cmd1" type="string" data="&gt;powershell.exe -new_console:a:t:&quot;cmd&quot; -noexit"/>
+					<value name="Active" type="dword" data="00000001"/>
+					<value name="Count" type="dword" data="00000003"/>
+					<value name="Cmd2" type="string" data="powershell.exe -new_console:a:t:&quot;vim&quot; -noprofile -noexit -command vim"/>
+					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;app&quot; -noprofile -noexit -command &quot;npm start&quot;"/>
 				</key>
 				<key name="Task6" modified="2015-02-24 07:35:07" build="140814">
 					<value name="Name" type="string" data="{cmd}"/>
@@ -687,10 +689,10 @@
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
 			</key>
-			<key name="Apps" modified="2015-02-24 07:35:07" build="140814">
+			<key name="Apps" modified="2015-05-26 21:18:24" build="140814">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
-			<key name="Colors" modified="2015-02-24 07:35:07" build="140814">
+			<key name="Colors" modified="2015-05-26 21:18:24" build="140814">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
 			<value name="Key.PicViewSlide" type="dword" data="80808013"/>

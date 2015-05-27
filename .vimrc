@@ -9,6 +9,7 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'zeis/vim-kolor'
 Plugin 'tpope/vim-markdown'
 Plugin 'Lokaltog/vim-distinguished'
+Plugin 'tpope/vim-surround'
 " Bundle 'Valloric/YouCompleteMe'
 call vundle#end()
 
@@ -27,7 +28,8 @@ set hidden
 "set spelllang=en
 
 " line numbers
-set nu
+" set nu
+set relativenumber
 
 " turn off word wrapping
 set nowrap
@@ -51,15 +53,18 @@ set incsearch
 
 " No annoying sound on errors
 set noerrorbells
-set novisualbell
 set t_vb=
 set tm=500
+command Nob set vb t_vb=
+set visualbell
 
 " Line Numbers
 set number
 
 " Enable syntax highlighting
 syntax enable
+filetype on
+au BufNewFile,BufRead *.cshtml set filetype=html
 
 " Who doesn't like autoindent?
 set autoindent
@@ -83,6 +88,9 @@ set expandtab
 autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
+
+"ctrl-p stuff
+let g:ctrlp_custom_ignore = 'node_modules\|.git\|bower_components\'
 
 " python stuff
 autocmd FileType python nnoremap <buffer> <F9> :w !python<CR>
@@ -109,8 +117,6 @@ colorscheme distinguished
 map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
 
 " commands
-command ScribeStarStories cd D:\Work\Product\acceptance_tests\stories | !ctags -R .
-command ScribeStarEditor cd D:\Work\Product\instance\ScribeStar.Web\Scripts\Editor | !ctags -R .
-command ScribeStarSass cd D:\Work\Product\instance\ScribeStar.Web\sass
-command ScribeStarRoot cd D:\Work\Product | !ctags -R .
+command SsWeb cd D:\Prod\src\ScribeStar.Web | !ctags -R .
+command SsRoot cd D:\Prod | !ctags -R .
 

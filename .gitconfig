@@ -9,8 +9,9 @@
   br = branch
   unstage = reset HEAD --
   last = log -1 HEAD
+  files = "!f() { git diff --name-status $1^!; }; f"
 [branch]
-  autosetuprebase = always         
+  #autosetuprebase = always         
 [pull]
   rebase = true
 [diff]

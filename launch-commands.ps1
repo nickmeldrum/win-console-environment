@@ -8,7 +8,7 @@ Set-Alias rdp "mstsc.exe"
 
 function Get-MinecraftDir {
     c:
-    cd c:\users\nick\appdata\roaming\.minecraft\saves
+    cd c:\users\nick.meldrum\appdata\roaming\.minecraft\saves
 }
 Set-Alias mine Get-MinecraftDir
 
