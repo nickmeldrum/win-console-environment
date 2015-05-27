@@ -135,4 +135,6 @@ function Echo-GitCommands {
   Write-Host "git merge --no-ff x                     | take the changes committed on x and merge them into current branch (with a merge commit)"
   Write-Host "Remember: " -NoNewLine
   Write-Host "http://nvie.com/posts/a-successful-git-branching-model/" -ForegroundColor magenta
+  Write-Host "git status --porcelain | where { `$_.StartsWith(`"??`") } | foreach-object { del `$_.replace(`"?? `", `"`") } | delete all untracked files"
+  Write-Host "git status --porcelain | where { `$_.StartsWith(`" D`") } | foreach-object { git reset HEAD `$_.replace(" D ", `"`") } | unstage all deleted files"
 }

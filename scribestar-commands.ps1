@@ -9,7 +9,7 @@ function Stop-ScribeStarServices {
 }
 
 function Start-ScribeStarConsoleServices {
-    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "C:\Work\Product\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
+    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "d:\prod\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
 }
 
 function Stop-ScribeStarConsoleServices {
@@ -24,7 +24,7 @@ function List-ScribeStarServiceStatus {
 function Build-ScribeStarSolution
 {
     stopss
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "C:\Work\Product\ScribeStar.Instance.sln" /t:build
+    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "D:\prod\ScribeStar.Instance.sln" /t:build
 }
 
 function Run-Nunit {
@@ -54,6 +54,21 @@ function Run-Nunit {
 
     $command = $nunitPath + $argList
     iex "& $command"
+
+    [xml]$testresults = cat .\TestResult.xml
+
+    echo "TODO: growl this!"
+    echo ("Total tests: " + $testresults."test-results".total)
+    echo ("Tests ignored: " + $testresults."test-results".ignored)
+    echo ("Test errors: " + $testresults."test-results".errors)
+    echo ("Test failures: " + $testresults."test-results".failures)
+
+    if ($testresults."test-results".failures -ne "0") {
+        echo "test assemblies that didn't succeed (possibly ignored or failed):"
+        select-xml "//test-suite[@result!='Success' and @type='Assembly']/@name" $testresults | % {$_.Node.'#text'}
+        echo "test cases that FAILED:"
+        select-xml "//test-case[@result='Failure']/@name" $testresults | % {$_.Node.'#text'}
+    }
 }
 
 function Get-NunitAsmList {
@@ -61,7 +76,7 @@ function Get-NunitAsmList {
         [Array]$asmKeys
     )
 
-    $rootPath = "c:\Work\Product\"
+    $rootPath = "D:\prod\"
     $asmConfigPath = "bin\Debug\"
 
     $testAssemblies = @{
@@ -141,17 +156,17 @@ function Make-DevCert
 
 function Compass-Compile
 {
-    del c:\Work\Product\src\ScribeStar.Web\Content\site.css -force
-    compass compile --css-dir "c:\Work\Product\src\ScribeStar.Web\Content" --sass-dir "c:\Work\Product\src\ScribeStar.Web\sass" --sourcemap --output-style expanded
+    del D:\prod\src\ScribeStar.Web\Content\site.css -force
+    compass compile --css-dir "D:\prod\src\ScribeStar.Web\Content" --sass-dir "D:\prod\src\ScribeStar.Web\sass" --sourcemap --output-style expanded
 }
 
 
 function SSEditorDir {
-    cd "C:\work\product\src\ScribeStar.Web\scripts\editor"
+    cd "D:\prod\src\ScribeStar.Web\scripts\editor"
 }
 
 function SSRootDir {
-    cd "C:\work\product"
+    cd "D:\prod"
 }
 
 function EditorKarma {
@@ -160,7 +175,7 @@ function EditorKarma {
 }
 
 #function Update-ActualSiteCss {
-#    $folder = 'D:\Work\Product\src\scribestar.web\sass'
+#    $folder = 'D:\prod\src\scribestar.web\sass'
 #    $filter = 'site.css'
 #     
 #    $fsw = New-Object IO.FileSystemWatcher $folder, $filter -Property @{IncludeSubdirectories = $false;NotifyFilter = [IO.NotifyFilters]'FileName, LastWrite'}
@@ -172,8 +187,8 @@ function EditorKarma {
 
 #        #Out-File -FilePath d:\work\scratch\UpdateActualSiteCss.log -Append -InputObject "The file '$name' was $changeType at $timeStamp"
 
-#        copy D:\Work\Product\src\scribestar.web\sass\site.css D:\Work\Product\src\ScribeStar.Web\content\site.css
-#        del D:\Work\Product\src\scribestar.web\sass\site.css
+#        copy D:\prod\src\scribestar.web\sass\site.css D:\prod\src\ScribeStar.Web\content\site.css
+#        del D:\prod\src\scribestar.web\sass\site.css
 #    }  
 
 
@@ -184,8 +199,8 @@ function EditorKarma {
 #        
 #        #Out-File -FilePath d:\work\scratch\UpdateActualSiteCss.log -Append -InputObject "The file '$name' was $changeType at $timeStamp"
 
-#        copy D:\Work\Product\src\scribestar.web\sass\site.css D:\Work\Product\src\ScribeStar.Web\content\site.css
-#        del D:\Work\Product\src\scribestar.web\sass\site.css
+#        copy D:\prod\src\scribestar.web\sass\site.css D:\prod\src\ScribeStar.Web\content\site.css
+#        del D:\prod\src\scribestar.web\sass\site.css
 
 #    } 
 
@@ -224,6 +239,6 @@ function Echo-ScribestarCommands {
     Write-host "Test-SystemIntegration                  | nunit test ScribeStar.Document.Service.Tests.SystemIntegrationTests namespace in DocService"
     Write-host "Test-Importers                          | nunit test ScribeStar.Document.Service.Tests.WordImporter.Importers namespace in DocService"
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
-    Write-Host "gci D:\Work\Product\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
+    Write-Host "gci D:\prod\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
 }
 
