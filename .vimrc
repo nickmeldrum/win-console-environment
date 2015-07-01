@@ -69,6 +69,9 @@ au BufNewFile,BufRead *.cshtml set filetype=html
 " Who doesn't like autoindent?
 set autoindent
 
+" when :vs the loaded file will show up on the right
+set splitright
+
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
 
@@ -91,6 +94,7 @@ inoremap <C-@> <C-Space>
 
 "ctrl-p stuff
 let g:ctrlp_custom_ignore = 'node_modules\|.git\|bower_components\'
+let g:ctrlp_working_path_mode = 0
 
 " python stuff
 autocmd FileType python nnoremap <buffer> <F9> :w !python<CR>
