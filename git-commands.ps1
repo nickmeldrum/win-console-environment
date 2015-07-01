@@ -1,6 +1,4 @@
 # Place the lines:
-#     $githubUsername= "username"
-#     $githubToken = "apptoken"
 # in your Profile before running this script
 
 # Run the Create-Github function on an already created local git repo to create a remote
