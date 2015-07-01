@@ -21,11 +21,16 @@ function Write-Subtitle {
     Write-Host $message -ForegroundColor DarkCyan
 }
 
+function Kill-MsBuild {
+    get-process "msbuild" | kill
+}
+
 function Kill-Node {
     get-process "node" | kill
 }
 
 Set-Alias killnode Kill-Node
+Set-Alias killmsbuild Kill-MsBuild
 
 function List-Colors {
     Write-Title "Powershell console colors:"
