@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
 	<key name="ConEmu">
-		<key name=".Vanilla" modified="2015-07-01 08:32:54" build="150504">
+		<key name=".Vanilla" modified="2015-07-17 09:17:58" build="150504">
 			<value name="StartType" type="hex" data="00"/>
 			<value name="CmdLine" type="string" data=""/>
 			<value name="StartTasksFile" type="string" data=""/>
@@ -58,7 +58,7 @@
 			<value name="ClipboardEOL" type="hex" data="00"/>
 			<value name="ClipboardArrowStart" type="hex" data="01"/>
 			<value name="ClipboardAllLines" type="hex" data="01"/>
-			<value name="ClipboardFirstLine" type="hex" data="01"/>
+			<value name="ClipboardFirstLine" type="hex" data="00"/>
 			<value name="ClipboardClickPromptPosition" type="hex" data="02"/>
 			<value name="ClipboardDeleteLeftWord" type="hex" data="02"/>
 			<value name="TrueColorerSupport" type="hex" data="01"/>
@@ -86,7 +86,7 @@
 			<value name="StoreTaskbarkTasks" type="hex" data="00"/>
 			<value name="StoreTaskbarCommands" type="hex" data="00"/>
 			<value name="SaveCmdHistory" type="hex" data="01"/>
-			<value name="CmdLineHistory" type="multi"><line data="{cmd}"/><line data="{vim}"/><line data="{scribestar}"/><line data="{vim} c:\fun.ps1"/><line data="{cmd (no profile)}"/><line data="{npmapp}"/><line data="{jsproj-mousejs}"/><line data="{cmd/ git}"/><line data="{PowerShell}"/><line data="{PowerShell (Admin)}"/><line data="{jsproj} /c dir C:\Work\nickmeldrum\mousejs"/><line data="{karma}"/>	<line data="{jsproj} /dir &quot;C:\Work\nickmeldrum\mousejs&quot;"/>
+			<value name="CmdLineHistory" type="multi"><line data="{scribestar}"/><line data="{npmapp}"/><line data="{cmd}"/><line data="{vim}"/><line data="{vim} c:\fun.ps1"/><line data="{cmd (no profile)}"/><line data="{jsproj-mousejs}"/><line data="{cmd/ git}"/><line data="{PowerShell}"/><line data="{PowerShell (Admin)}"/><line data="{jsproj} /c dir C:\Work\nickmeldrum\mousejs"/><line data="{karma}"/>	<line data="{jsproj} /dir &quot;C:\Work\nickmeldrum\mousejs&quot;"/>
 				<line data="{jsproj}"/>
 			</value>
 			<value name="SingleInstance" type="hex" data="00"/>
@@ -549,9 +549,9 @@
 			<value name="DndLKey" type="hex" data="00"/>
 			<value name="DndRKey" type="hex" data="a2"/>
 			<value name="WndDragKey" type="dword" data="00121101"/>
-			<key name="Tasks" modified="2015-07-01 08:32:54" build="150504">
+			<key name="Tasks" modified="2015-07-17 09:17:58" build="150504">
 				<value name="Count" type="dword" data="00000005"/>
-				<key name="Task1" modified="2015-07-01 08:32:54" build="150504">
+				<key name="Task1" modified="2015-07-17 09:17:58" build="150504">
 					<value name="Name" type="string" data="{cmd}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00115b4e"/>
@@ -560,7 +560,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task2" modified="2015-07-01 08:32:54" build="150504">
+				<key name="Task2" modified="2015-07-17 09:17:58" build="150504">
 					<value name="Name" type="string" data="{vim}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00115b56"/>
@@ -572,7 +572,7 @@
 					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;tests&quot; -noprofile -noexit -command &quot;npm test&quot;"/>
 					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;http-server&quot; -noprofile -noexit -command &quot;npm start&quot;"/>
 				</key>
-				<key name="Task3" modified="2015-07-01 08:32:54" build="150504">
+				<key name="Task3" modified="2015-07-17 09:17:58" build="150504">
 					<value name="Name" type="string" data="{cmd (no profile)}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00115b50"/>
@@ -584,7 +584,7 @@
 					<value name="Cmd3" type="string" data="powershell.exe -new_console:a:t:&quot;client tests&quot; -noexit -command &quot;editorkarma&quot;"/>
 					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;server tests&quot; -noexit -command &quot;test-allexceptbrowser&quot;"/>
 				</key>
-				<key name="Task4" modified="2015-07-01 08:32:54" build="150504">
+				<key name="Task4" modified="2015-07-17 09:17:58" build="150504">
 					<value name="Name" type="string" data="{scribestar}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -597,11 +597,11 @@
 					<value name="Cmd4" type="string" data="powershell.exe -new_console:a:t:&quot;server tests&quot; -noexit -command &quot;test-allexceptbrowser&quot;"/>
 					<value name="Cmd5" type="string" data="powershell.exe -new_console:a:t:&quot;sass-watch&quot; -noprofile -noexit -command &quot;.\sass.cmd&quot;"/>
 				</key>
-				<key name="Task5" modified="2015-07-01 08:32:54" build="150504">
+				<key name="Task5" modified="2015-07-17 09:17:58" build="150504">
 					<value name="Name" type="string" data="{npmapp}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
-					<value name="GuiArgs" type="string" data="/dir D:\nickmeldrum\basic-ajax"/>
+					<value name="GuiArgs" type="string" data="/dir D:\nickmeldrum\learn-xml"/>
 					<value name="Cmd1" type="string" data="&gt;powershell.exe -new_console:a:t:&quot;cmd&quot; -noexit"/>
 					<value name="Active" type="dword" data="00000001"/>
 					<value name="Count" type="dword" data="00000003"/>
@@ -691,17 +691,17 @@
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
 			</key>
-			<key name="Apps" modified="2015-07-01 08:32:54" build="150504">
+			<key name="Apps" modified="2015-07-17 09:17:58" build="150504">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
-			<key name="Colors" modified="2015-07-01 08:32:54" build="150504">
+			<key name="Colors" modified="2015-07-17 09:17:58" build="150504">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
 			<value name="Key.PicViewSlide" type="dword" data="80808013"/>
 			<value name="Key.PicViewSlower" type="dword" data="808080bd"/>
 			<value name="Key.PicViewFaster" type="dword" data="808080bb"/>
 			<value name="Multi.CloseConfirmFlags" type="hex" data="00"/>
-			<key name="HotKeys" modified="2015-07-01 08:32:54" build="150504">
+			<key name="HotKeys" modified="2015-07-17 09:17:58" build="150504">
 				<value name="KeyMacroVersion" type="hex" data="02"/>
 				<value name="Multi.Modifier" type="dword" data="0000005b"/>
 				<value name="Multi.ArrowsModifier" type="dword" data="0000005b"/>

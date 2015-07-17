@@ -10,6 +10,7 @@ Plugin 'zeis/vim-kolor'
 Plugin 'tpope/vim-markdown'
 Plugin 'Lokaltog/vim-distinguished'
 Plugin 'tpope/vim-surround'
+Plugin 'jlanzarotta/bufexplorer'
 " Bundle 'Valloric/YouCompleteMe'
 call vundle#end()
 
@@ -22,6 +23,9 @@ set nowb
 
 " buffers can exist in background
 set hidden
+
+" map control -n to next buffer
+:nnoremap <C-n> :bnext<CR>
 
 " allow spell check
 "set spell
@@ -93,14 +97,14 @@ inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
 
 "ctrl-p stuff
-let g:ctrlp_custom_ignore = 'node_modules\|.git\|bower_components\'
-let g:ctrlp_working_path_mode = 0
+let g:ctrlp_custom_ignore = 'node_modules\|.git\|bower_components\|packages|3rdparty'
+let g:ctrlp_working_path_mode = 'r'
 
 " python stuff
 autocmd FileType python nnoremap <buffer> <F9> :w !python<CR>
  
 " markdown stuff
-"autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 
 " tabbing
 set smartindent
@@ -123,4 +127,33 @@ map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
 " commands
 command SsWeb cd D:\Prod\src\ScribeStar.Web | !ctags -R .
 command SsRoot cd D:\Prod | !ctags -R .
+
+function! DoPrettyXML()
+  " save the filetype so we can restore it later
+  let l:origft = &ft
+  set ft=
+  " delete the xml header if it exists. This will
+  " permit us to surround the document with fake tags
+  " without creating invalid xml.
+  1s/<?xml .*?>//e
+  " insert fake tags around the entire document.
+  " This will permit us to pretty-format excerpts of
+  " XML that may contain multiple top-level elements.
+  0put ='<PrettyXML>'
+  $put ='</PrettyXML>'
+  silent %!xmllint --format -
+  " xmllint will insert an <?xml?> header. it's easy enough to delete
+  " if you don't want it.
+  " delete the fake tags
+  2d
+  $d
+  " restore the 'normal' indentation, which is one extra level
+  " too deep due to the extra tags we wrapped around the document.
+  silent %<
+  " back to home
+  1
+  " restore the filetype
+  exe "set ft=" . l:origft
+endfunction
+command! PrettyXML call DoPrettyXML()
 
