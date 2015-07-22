@@ -11,7 +11,10 @@ Plugin 'tpope/vim-markdown'
 Plugin 'Lokaltog/vim-distinguished'
 Plugin 'tpope/vim-surround'
 Plugin 'jlanzarotta/bufexplorer'
-" Bundle 'Valloric/YouCompleteMe'
+Plugin 'PProvost/vim-ps1'
+Plugin 'marijnh/tern_for_vim'
+Plugin 'scrooloose/nerdtree'
+" Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 
 filetype plugin indent on
@@ -156,4 +159,8 @@ function! DoPrettyXML()
   exe "set ft=" . l:origft
 endfunction
 command! PrettyXML call DoPrettyXML()
+
+" nerdtree stuff
+" close vim if nerdtree only window left open
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
