@@ -220,6 +220,13 @@ function Echo-VimCommands {
     Write-Host "dab `"delete arounb brackets`", daB for around curly brackets, t for xml type tags, combinations with normal commands are as expected cib/yaB/dit/vat etc"
     Write-Host ":earlier 15m :later n - revert the document to a time in the past (later moves it back forward)"
     Write-Host ":.! ls - dump output from command into editor"
+    write-host
+    write-host "vim surround stuff:"
+    write-host "S<p class='important'> = surround selected text in Visual mode with <p class='important'>something selected</p>"
+    write-host "cs`"' change surrounding double quotes to single"
+    write-host "ds`" to remove quote delimiters"
+    write-host "ysiw[ = surround a word with [ word ]"
+    write-host "ysiw] = surround a word with [word]"
 }
 
 Set-Alias echovim Echo-VimCommands
