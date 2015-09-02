@@ -227,6 +227,11 @@ function Echo-VimCommands {
     write-host "ds`" to remove quote delimiters"
     write-host "ysiw[ = surround a word with [ word ]"
     write-host "ysiw] = surround a word with [word]"
+
+    write-host "zg add word under cursor as good"
+    write-host "zw add word under cursor as bad"
+    write-host "z= suggestions"
+    write-host ";spellr repeat z= suggestion done for all matches in current window"
 }
 
 Set-Alias echovim Echo-VimCommands
