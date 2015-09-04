@@ -3,11 +3,16 @@ $userRoot = "C:\Users\nick.meldrum"
 $envRepo = "D:\env"
 $scribestarRepo = "D:\prod"
 
-# Enter these values:
-$githubUsername= "nickmeldrum"
-$githubToken = "apptoken"
-$bitbucketUsername= "nickmeldrum"
-$bitbucketToken = "apptoken"
+$githubToken = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:githubToken').password
+
+$githubUsername = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:githubPassword').username
+$githubPassword = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:githubPassword').password
+
+$bitbucketUsername = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:bitbucketToken').username
+$bitbucketToken = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:bitbucketToken').password
+
+$dnsimpleEmail = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:dnsimpleToken').username
+$dnsimpleToken = (& "$envrepo\3rdparty\credman.ps1" -getcred -target 'nicks:dnsimpleToken').password
 
 $env:PSModulePath = $env:PSModulePath + ";$envRepo\3rdparty"
 # Import-Module "PowerTab" -ArgumentList "$userRoot\Documents\WindowsPowerShell\PowerTabConfig.xml"
