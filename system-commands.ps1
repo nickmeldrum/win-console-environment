@@ -42,7 +42,8 @@ function Create-DummyFile {
 }
 
 function Get-PathVariable {
-    gci env: | where name -eq path | select value | format-list
+    $path = (gci env: | where name -eq path | select value).value
+    $path.split(';') | sort
 }
 
 Set-Alias path Get-PathVariable
@@ -55,5 +56,6 @@ function Echo-SystemCommands {
     Write-Host "Start-ProcessIfNotRunning x y           | starts a process with name x and path y if it isn't already running"
     Write-Host "Stop-ProcessIfStarted x y               | stops a process with name x if it is running"
     Write-Host "Create-DummyFile x y                    | create a dummy file with name x and size y (e.g. 1mb 100mb 1gb etc.)"
+    Write-Host "path (Get-PathVariable) | get nice sorted formatted list of paths"
 }
 
