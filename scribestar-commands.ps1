@@ -227,7 +227,6 @@ function Echo-ScribestarCommands {
     Write-host "rebuild                                 | Rebuild ScribeStar Solutions"
     Write-host "debug-web or debug-webapi               | Debug ScribeStar Web or web api"
     Write-host "Debug-NotificationsService              | Debug notifications service or console"
-    Write-host "Compass-Compile                         | o 0"
     Write-host "SSScriptsDir SSWebDir SSDiffDir SSDiffTestsDir SSRootDir                   | move to directories in solution"
     Write-host "Get-NunitAsmList                        | List all tests assemblies to pass into Run-Nunit"
     Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit (Get-NunitAsmList @(`"DocService`", `"Doc`")) `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
