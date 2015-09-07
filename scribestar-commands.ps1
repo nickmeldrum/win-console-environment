@@ -1,3 +1,23 @@
+function SSScriptsDir {
+    cd "$($localConfig.scribestarRepo)\src\ScribeStar.Web\scripts"
+}
+
+function SSWebDir {
+    cd "$($localConfig.scribestarRepo)\src\ScribeStar.Web"
+}
+
+function SSDiffDir {
+    cd "$($localConfig.scribestarRepo)\src\dita-compare-service"
+}
+
+function SSDiffTestsDir {
+    cd "$($localConfig.scribestarRepo)\src\ScribeStar.SystemIntegrationTests\Diff"
+}
+
+function SSRootDir {
+    cd $localConfig.scribestarRepo
+}
+
 function Start-ScribeStarServices {
     gsv | where {$_.name -like 'ScribeStar*'} | Start-Service
     gsv | where {$_.name -like 'ScribeStar*'}
@@ -9,7 +29,7 @@ function Stop-ScribeStarServices {
 }
 
 function Start-ScribeStarConsoleServices {
-    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "d:\prod\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
+    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "$($localCOnfig.scribestarRepo)\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
 }
 
 function Stop-ScribeStarConsoleServices {
@@ -24,7 +44,7 @@ function List-ScribeStarServiceStatus {
 function Build-ScribeStarSolution
 {
     stopss
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "D:\prod\ScribeStar.Instance.sln" /t:build
+    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "$($localCOnfig.scribestarRepo)\ScribeStar.sln" /t:build
 }
 
 function Run-Nunit {
@@ -76,7 +96,7 @@ function Get-NunitAsmList {
         [Array]$asmKeys
     )
 
-    $rootPath = "D:\prod\"
+    $rootPath = "$($localConfig.scribestarRepo)\"
     $asmConfigPath = "bin\Debug\"
 
     $testAssemblies = @{
@@ -154,26 +174,6 @@ function Make-DevCert
     makecert.exe -n "CN=development.scribestar.internal" -pe -ss My -sr LocalMachine -sky exchange -m 120 -in "Nicks Fake Root CA" -is Root -ir LocalMachine -a sha1 -eku 1.3.6.1.5.5.7.3.1
 }
 
-function Compass-Compile
-{
-    del D:\prod\src\ScribeStar.Web\Content\site.css -force
-    compass compile --css-dir "D:\prod\src\ScribeStar.Web\Content" --sass-dir "D:\prod\src\ScribeStar.Web\sass" --sourcemap --output-style expanded
-}
-
-
-function SSEditorDir {
-    cd "D:\prod\src\ScribeStar.Web\scripts\editor"
-}
-
-function SSRootDir {
-    cd "D:\prod"
-}
-
-function EditorKarma {
-    sseditordir
-    node node_modules\karma\bin\karma start
-}
-
 #function Update-ActualSiteCss {
 #    $folder = 'D:\prod\src\scribestar.web\sass'
 #    $filter = 'site.css'
@@ -207,7 +207,6 @@ function EditorKarma {
 #    write-host "compass watch --css-dir src\scribestar.web\sass --sass-dir src\scribestar.web\sass\styles --output-style expanded"
 #}
 
-
 Set-Alias startss Start-ScribeStarServices
 Set-Alias stopss Stop-ScribeStarServices
 Set-Alias startssc Start-ScribeStarConsoleServices
@@ -229,8 +228,7 @@ function Echo-ScribestarCommands {
     Write-host "debug-web or debug-webapi               | Debug ScribeStar Web or web api"
     Write-host "Debug-NotificationsService              | Debug notifications service or console"
     Write-host "Compass-Compile                         | o 0"
-    Write-host "sseditordir ssrootdir                   | move to directories in solution"
-    Write-host "editorkarma                             | run editor karma"
+    Write-host "SSScriptsDir SSWebDir SSDiffDir SSDiffTestsDir SSRootDir                   | move to directories in solution"
     Write-host "Get-NunitAsmList                        | List all tests assemblies to pass into Run-Nunit"
     Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit (Get-NunitAsmList @(`"DocService`", `"Doc`")) `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
     Write-host "Test-WholeSuite                         | nunit test everything including selenium stuff"
@@ -241,4 +239,4 @@ function Echo-ScribestarCommands {
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
     Write-Host "gci D:\prod\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
 }
-
+ 
