@@ -41,12 +41,6 @@ function List-ScribeStarServiceStatus {
     Get-Process 'ScribeStar*' | Format-Table
 }
 
-function Build-ScribeStarSolution
-{
-    stopss
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "$($localCOnfig.scribestarRepo)\ScribeStar.sln" /t:build
-}
-
 function Run-Nunit {
     param (
         [string[]]$assemblies,
@@ -103,6 +97,19 @@ Function List-TestProjectsPath {
     ssrootdir
     ls *.csproj -recurse | where {$_.extension -eq ".csproj" -and $_.name.contains("Tests")} | % { write-output $_.directoryname}
     popd
+}
+
+Function List-TestProjectsFullPath {
+    pushd
+    ssrootdir
+    $list = ls *.csproj -recurse | where {$_.extension -eq ".csproj" -and $_.name.contains("Tests")} | % { write-output $_.fullname}
+    popd
+    return $list
+}
+
+Function Get-TestCsproj {
+    param ([string]$search)
+    List-TestProjectsFullPath | where {$_.contains($search)}
 }
 
 function Get-NunitAsmList {
@@ -162,6 +169,20 @@ function Test-SystemIntegration {
 function Test-Diff {
     $asmList = Get-NunitAsmList @("SystemIntegration")
     Run-Nunit $asmList "ScribeStar.SystemIntegrationTests.Diff"
+}
+
+function Build-ScribeStarSolution
+{
+    stopss
+    stopssc
+    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "$($localConfig.scribestarRepo)\ScribeStar.sln" /t:build
+}
+
+function Build-SystemIntegrationTests
+{
+    stopss
+    stopssc
+    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" (Get-TestCsProj "SystemIntegration") /t:build
 }
 
 function Rebuild-ScribeStarSolution()
