@@ -40,6 +40,22 @@ function Get-PrettyLogForFile {
     g log --follow --pretty=format:'%C(yellow)%h %Cred%ad %C(yellow)%an%Cgreen%d %Creset%s' --date=short $file
 }
 
+Function Delete-AllUntracked {
+    git status --porcelain | where { $_.StartsWith("??") } | foreach-object { del $_.replace("?? ", "") }
+}
+
+Function Unstage-AllDeleted {
+    git status --porcelain | where { $_.StartsWith(" D") } | foreach-object { git reset HEAD $_.replace(" D ", "") }
+}
+
+Function Save-Work {
+    git stash save -u
+}
+
+Function Get-Work {
+    git stash apply
+}
+
 Set-Alias g git
 Set-Alias acg AddAndCommit-Git
 Set-Alias log Get-PrettyLog
@@ -56,6 +72,7 @@ function Echo-GitCommands {
   Write-Host "git checkout -b x                       | create a new branch x and move to it"
   Write-Host "git checkout --track origin/x           | create a local branch tracking a remote branch x"
   Write-Host "g push origin --delete b                | delete remote branch b"
+  Write-Host "git remote set-url origin https://github.com/USERNAME/OTHERREPOSITORY.git | changing remote url"
   Write-Host "g checkout -- x                         | undo unstaged changes to file x"
   Write-Host "log x                                   | Get-PrettyLog x - show pretty oneline git log x defaults to 5"
   Write-Host "git reset HEAD x                        | undo staged changes to file x"
@@ -69,6 +86,11 @@ function Echo-GitCommands {
   Write-Host "git merge --no-ff x                     | take the changes committed on x and merge them into current branch (with a merge commit)"
   Write-Host "Remember: " -NoNewLine
   Write-Host "http://nvie.com/posts/a-successful-git-branching-model/" -ForegroundColor magenta
-  Write-Host "git status --porcelain | where { `$_.StartsWith(`"??`") } | foreach-object { del `$_.replace(`"?? `", `"`") } | delete all untracked files"
-  Write-Host "git status --porcelain | where { `$_.StartsWith(`" D`") } | foreach-object { git reset HEAD `$_.replace(" D ", `"`") } | unstage all deleted files"
+  Write-Host "Delete-AllUntracked: git status --porcelain | where { `$_.StartsWith(`"??`") } | foreach-object { del `$_.replace(`"?? `", `"`") } | delete all untracked files"
+  Write-Host "Unstage-AllDeleted: git status --porcelain | where { `$_.StartsWith(`" D`") } | foreach-object { git reset HEAD `$_.replace(" D ", `"`") } | unstage all deleted files"
+  Write-Host "Get-PrettyLogForFile x"
+  Write-Host "Get-SpecificBlame file hash startLine numberLines"
+  Write-Host "Save-Work: git stash save -u"
+  Write-Host "Get-Work: git stash apply"
 }
+
