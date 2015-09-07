@@ -4,7 +4,8 @@ $ErrorActionPreference = "Stop"
 # {
 #     "userRoot": "C:/Users/nick.meldrum",
 #     "envRepo": "D:/env",
-#     "scribestarRepo": "D:/prod"
+#     "scribestarRepo": "D:/prod",
+#     "defaultChromeProfile": "Profile 3"
 # }
 
 if (-not (test-path ~/localconfig.json)) {
