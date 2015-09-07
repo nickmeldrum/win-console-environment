@@ -114,12 +114,12 @@ function Get-NunitAsmList {
     $asmConfigPath = "bin\Debug\"
 
     $testAssemblies = @{
-        "DocService" = $rootPath + "instance\ScribeStar.Document.Service.Tests\" + $asmConfigPath + "ScribeStar.Document.Service.Tests.dll";
-        "Doc" = $rootPath + "instance\ScribeStar.Document.Tests\" + $asmConfigPath + "ScribeStar.Document.Tests.dll";
         "Browser" = $rootPath + "src\Scribestar.AutomatedTests\bin\ScribeStar.AutomatedTests.dll";
-        "Client" = $rootPath + "src\ScribeStar.Client\" + $asmConfigPath + "ScribeStar.Client.dll";
-        "Shared" = $rootPath + "src\ScribeStar.Shared.Tests\" + $asmConfigPath + "ScribeStar.Core.Tests.dll";
-        "Tests" = $rootPath + "src\ScribeStar.Tests\" + $asmConfigPath + "ScribeStar.Tests.dll";
+        "Checklisting" = $rootPath + "src\ScribeStar.Checklisting.Tests\" + $asmConfigPath + "ScribeStar.Checklisting.Tests.dll";
+        "Dita" = $rootPath + "src\ScribeStar.Dita.Tests\bin\ScribeStar.Dita.Tests.dll";
+        "DitaImport" = $rootPath + "src\ScribeStar.Dita.Import.Tests\" + $asmConfigPath + "ScribeStar.Dita.Import.Tests.dll";
+        "SystemIntegration" = $rootPath + "src\ScribeStar.SystemIntegrationTests\bin\ScribeStar.SystemIntegrationTests.dll";
+        "WebApi" = $rootPath + "src\ScribeStar.WebApi.Tests\" + $asmConfigPath + "ScribeStar.WebApi.Tests.dll";
         "Web" = $rootPath + "src\ScribeStar.Web.Tests\" + $asmConfigPath + "ScribeStar.Web.Tests.dll";
     }
 
@@ -140,23 +140,28 @@ function Test-WholeSuite {
 }
 
 function Test-AllExceptBrowser {
-    $asmList = Get-NunitAsmList @("DocService", "Doc", "Client", "Shared", "Tests", "Web")
+    $asmList = Get-NunitAsmList @("Checklisting", "Dita", "DitaImport", "SystemIntegration", "WebApi", "Web")
     Run-Nunit $asmList
 }
 
-function Test-DocStuff {
-    $asmList = Get-NunitAsmList @("DocService", "Doc")
+function Test-Browser {
+    $asmList = Get-NunitAsmList @("Browser")
+    Run-Nunit $asmList
+}
+
+function Test-Checklisting {
+    $asmList = Get-NunitAsmList @("Checklisting")
     Run-Nunit $asmList
 }
 
 function Test-SystemIntegration {
-    $asmList = Get-NunitAsmList @("DocService")
-    Run-Nunit $asmList "ScribeStar.Document.Service.Tests.SystemIntegrationTests"
+    $asmList = Get-NunitAsmList @("SystemIntegration")
+    Run-Nunit $asmList
 }
 
-function Test-Importers {
-    $asmList = Get-NunitAsmList @("DocService")
-    Run-Nunit $asmList "ScribeStar.Document.Service.Tests.WordImporter.Importers"
+function Test-Diff {
+    $asmList = Get-NunitAsmList @("SystemIntegration")
+    Run-Nunit $asmList "ScribeStar.SystemIntegrationTests.Diff"
 }
 
 function Rebuild-ScribeStarSolution()
@@ -246,11 +251,12 @@ function Echo-ScribestarCommands {
     Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit (Get-NunitAsmList @(`"DocService`", `"Doc`")) `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
     Write-host "Test-WholeSuite                         | nunit test everything including selenium stuff"
     Write-host "Test-AllExceptBrowser                   | nunit test everything except selenium stuff"
-    Write-host "Test-DocStuff                           | nunit test DocumentService and Document"
-    Write-host "Test-SystemIntegration                  | nunit test ScribeStar.Document.Service.Tests.SystemIntegrationTests namespace in DocService"
-    Write-host "Test-Importers                          | nunit test ScribeStar.Document.Service.Tests.WordImporter.Importers namespace in DocService"
+    Write-host "Test-Browser                            | nunit test only selenium stuff"
+    Write-host "Test-Checklisting"
+    Write-host "Test-SystemIntegration"
+    Write-host "Test-Diff"
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
     Write-Host "gci D:\prod\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
-    Write-Host "List-TestProjects - recursively search for all csprojs with the word test in them"
+    Write-Host "List-TestProjects or List-TestProjectsPath - recursively search for all csprojs with the word test in them"
 }
  
