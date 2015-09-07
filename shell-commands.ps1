@@ -101,14 +101,6 @@ function JsGrep {
     grep -i -n -r $text *.js .
 }
 
-function SSEditorDir {
-    cd "C:\work\product\instance\ScribeStar.Web\scripts\editor"
-}
-
-function SSRootDir {
-    cd "C:\work\product\instance"
-}
-
 function sw {
     return [system.diagnostics.stopwatch]::startNew();
 }
