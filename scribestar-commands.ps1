@@ -91,6 +91,20 @@ function Run-Nunit {
     }
 }
 
+Function List-TestProjects {
+    pushd
+    ssrootdir
+    ls "*.csproj" -recurse | grep "csproj" | grep "Tests" | gawk '{print $5}' | % {$_.replace(".csproj", "")}
+    popd
+}
+
+Function List-TestProjectsPath {
+    pushd
+    ssrootdir
+    ls *.csproj -recurse | where {$_.extension -eq ".csproj" -and $_.name.contains("Tests")} | % { write-output $_.directoryname}
+    popd
+}
+
 function Get-NunitAsmList {
     param (
         [Array]$asmKeys
@@ -237,5 +251,6 @@ function Echo-ScribestarCommands {
     Write-host "Test-Importers                          | nunit test ScribeStar.Document.Service.Tests.WordImporter.Importers namespace in DocService"
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
     Write-Host "gci D:\prod\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
+    Write-Host "List-TestProjects - recursively search for all csprojs with the word test in them"
 }
  
