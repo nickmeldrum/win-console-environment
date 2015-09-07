@@ -8,23 +8,32 @@ Set-Alias rdp "mstsc.exe"
 
 function Get-MinecraftDir {
     c:
-    cd c:\users\nick.meldrum\appdata\roaming\.minecraft\saves
+    cd "~\appdata\roaming\.minecraft\saves"
 }
 Set-Alias mine Get-MinecraftDir
 
-function Google {
-    Start chrome "https://www.google.co.uk/#q=`"$args`""
+function Chrome {
+    param ([string]$url)
+
+    ."C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --profile-directory="$($localConfig.defaultChromeProfile)" $url
 }
 
-function EditorKarma {
-    sseditordir
-    node .\node_modules\karma\bin\karma start
-    #karma start
+function Google {
+    param ([string]$search)
+
+    Chrome  "https://www.google.co.uk/#q=$search"
+}
+
+function StackOverflow {
+    param ([string]$search)
+
+    Chrome  "https://stackoverflow.com/search?q=$search"
 }
 
 function Reload-Profile {
-    . $profile
+    . "~/documents/windowspowershell/profile.ps1"
 }
+
 function Echo-Profile {
     Echo-VimCommands
     Echo-GitCommands
@@ -43,7 +52,9 @@ function Echo-LaunchCommands {
 
     write-host "edit x                        | edit x in sublime text"
     write-host "mdo x                         | edit x in markdownpad"
-    write-host "start chrome                  | open browser"
+    write-host "Chrome x                      | open browser with specific profile"
+    write-host "Google x                      | search google"
+    write-host "StackOverflow x               | search stack overflow"
     write-host "explorer x                    | open windows explorer at location x"
     write-host "music                         | amazon music"
     write-host "rdp                           | remote desktop connection"
