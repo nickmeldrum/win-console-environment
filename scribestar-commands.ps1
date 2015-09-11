@@ -85,90 +85,97 @@ function Run-Nunit {
     }
 }
 
-Function List-TestProjects {
+$projectFiles = @()
+$ignore = @(".nuget", "target", "packages", "node_modules", "bin", "obj", ".teamcity", ".git", "docs", "lib")
+
+Function ListProjectFilesRecurse {
+    param ($dir)
+    
+    if ($script:ignore.contains($dir.name)) { return }
+
+    ls -path $dir.fullname -directory -exclude $script:ignore | % { ListProjectFilesRecurse $_ }
+
+    $script:projectFiles += ls -path $dir.fullname -file "*.csproj"
+}
+
+Function List-ProjectFiles {
+    $script:projectFiles = @()
     pushd
     ssrootdir
-    ls "*.csproj" -recurse | grep "csproj" | grep "Tests" | gawk '{print $5}' | % {$_.replace(".csproj", "")}
+    ListProjectFilesRecurse ".\"
     popd
+    $script:projectFiles
 }
 
-Function List-TestProjectsPath {
-    pushd
-    ssrootdir
-    ls *.csproj -recurse | where {$_.extension -eq ".csproj" -and $_.name.contains("Tests")} | % { write-output $_.directoryname}
-    popd
+Function String-ContainsCaseInsensitive {
+    param ([string]$original, [string]$contains)
+
+    return $original.indexof($contains, [System.StringComparison]::OrdinalIgnoreCase) -ge 0
 }
 
-Function List-TestProjectsFullPath {
-    pushd
-    ssrootdir
-    $list = ls *.csproj -recurse | where {$_.extension -eq ".csproj" -and $_.name.contains("Tests")} | % { write-output $_.fullname}
-    popd
-    return $list
+function IfNull($a, $b, $c) { if ($a -eq $null) { $b } else { $c } }
+
+Function List-TestProjectFiles {
+    param ([string[]]$include, [string[]]$exclude)
+
+    List-ProjectFiles | where {(String-ContainsCaseInsensitive $_.name "tests")} |
+        where {
+            foreach ($item in $include) { if (( String-ContainsCaseInsensitive $_.name $item )) { return $true } }
+            return (IfNull $include $true $false)
+        } | where {
+            if ($exclude -eq $null) { return $true }
+            foreach ($item in $exclude) { if ((String-ContainsCaseInsensitive $_.name $item)) { return $false } }
+            return $true
+        }
 }
 
-Function Get-TestCsproj {
-    param ([string]$search)
-    List-TestProjectsFullPath | where {$_.contains($search)}
-}
+Function Get-AssemblyFromTestProjectFiles {
+    param ([string[]]$include, [string[]]$exclude)
 
-function Get-NunitAsmList {
-    param (
-        [Array]$asmKeys
-    )
+    [System.IO.FileInfo[]]$projectFiles = (List-TestProjectFiles -include $include -exclude $exclude)
 
-    $rootPath = "$($localConfig.scribestarRepo)\"
-    $asmConfigPath = "bin\Debug\"
+    $assemblyNames = @()
 
-    $testAssemblies = @{
-        "Browser" = $rootPath + "src\Scribestar.AutomatedTests\bin\ScribeStar.AutomatedTests.dll";
-        "Checklisting" = $rootPath + "src\ScribeStar.Checklisting.Tests\" + $asmConfigPath + "ScribeStar.Checklisting.Tests.dll";
-        "Dita" = $rootPath + "src\ScribeStar.Dita.Tests\bin\ScribeStar.Dita.Tests.dll";
-        "DitaImport" = $rootPath + "src\ScribeStar.Dita.Import.Tests\" + $asmConfigPath + "ScribeStar.Dita.Import.Tests.dll";
-        "SystemIntegration" = $rootPath + "src\ScribeStar.SystemIntegrationTests\bin\ScribeStar.SystemIntegrationTests.dll";
-        "WebApi" = $rootPath + "src\ScribeStar.WebApi.Tests\" + $asmConfigPath + "ScribeStar.WebApi.Tests.dll";
-        "Web" = $rootPath + "src\ScribeStar.Web.Tests\" + $asmConfigPath + "ScribeStar.Web.Tests.dll";
+    foreach($projectFile in $projectFiles) {
+        [xml]$xml = Get-Content $projectFile.fullname
+        $ns = @{ns="http://schemas.microsoft.com/developer/msbuild/2003"}
+        $asmName = (Select-Xml -Xml $xml -XPath '/ns:Project/ns:PropertyGroup/ns:AssemblyName/text()' -Namespace $ns).node.value
+        $outputPath = (Select-Xml -Xml $xml -XPath "/ns:Project/ns:PropertyGroup[contains(@Condition, 'Debug')]/ns:OutputPath/text()" -Namespace $ns).node.value 
+
+        $fullAsmPath = join-path (join-path $projectFile.directory.fullname $outputpath) "$asmName.dll"
+
+        $assemblyNames += $fullAsmPath
     }
 
-    $outputArray = @()
-
-    if ($asmKeys -eq $null -or $asmKeys.Count -eq 0) {
-        $testAssemblies.getEnumerator() | % { $outputArray += $_.Value }
-    }
-    else {
-        $testAssemblies.getEnumerator() | where Name -in $asmKeys | % { $outputArray += $_.Value }
-    }
-
-    return $outputArray
+    return $assemblyNames
 }
 
 function Test-WholeSuite {
-    Run-Nunit (Get-NunitAsmList)
+    Run-Nunit (Get-AssemblyFromTestProjectFiles)
 }
 
 function Test-AllExceptBrowser {
-    $asmList = Get-NunitAsmList @("Checklisting", "Dita", "DitaImport", "SystemIntegration", "WebApi", "Web")
-    Run-Nunit $asmList
+    Run-Nunit (Get-AssemblyFromTestProjectFiles -exclude "Automated")
 }
 
 function Test-Browser {
-    $asmList = Get-NunitAsmList @("Browser")
-    Run-Nunit $asmList
+    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Automated")
 }
 
 function Test-Checklisting {
-    $asmList = Get-NunitAsmList @("Checklisting")
-    Run-Nunit $asmList
+    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Checklisting")
 }
 
 function Test-SystemIntegration {
-    $asmList = Get-NunitAsmList @("SystemIntegration")
-    Run-Nunit $asmList
+    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "SystemIntegration")
+}
+
+function Test-Bookmarking {
+    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "SystemIntegration") "ScribeStar.SystemIntegrationTests.Bookmarking"
 }
 
 function Test-Diff {
-    $asmList = Get-NunitAsmList @("SystemIntegration")
-    Run-Nunit $asmList "ScribeStar.SystemIntegrationTests.Diff"
+    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Diff")
 }
 
 function Build-ScribeStarSolution
@@ -268,8 +275,9 @@ function Echo-ScribestarCommands {
     Write-host "debug-web or debug-webapi               | Debug ScribeStar Web or web api"
     Write-host "Debug-NotificationsService              | Debug notifications service or console"
     Write-host "SSScriptsDir SSWebDir SSDiffDir SSDiffTestsDir SSRootDir                   | move to directories in solution"
-    Write-host "Get-NunitAsmList                        | List all tests assemblies to pass into Run-Nunit"
-    Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit (Get-NunitAsmList @(`"DocService`", `"Doc`")) `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
+    Write-host "List-TestProjectFiles -include strarry -exclude strarray        | List all test project files"
+    Write-host "Get-AssemblyFromTestProjectFiles -include strarray -exclude strarray        | List all tests assemblies to pass into Run-Nunit"
+    Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit `$asmList `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
     Write-host "Test-WholeSuite                         | nunit test everything including selenium stuff"
     Write-host "Test-AllExceptBrowser                   | nunit test everything except selenium stuff"
     Write-host "Test-Browser                            | nunit test only selenium stuff"
@@ -278,6 +286,5 @@ function Echo-ScribestarCommands {
     Write-host "Test-Diff"
     Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
     Write-Host "gci D:\prod\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
-    Write-Host "List-TestProjects or List-TestProjectsPath - recursively search for all csprojs with the word test in them"
 }
  
