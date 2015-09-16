@@ -163,4 +163,3 @@ command! PrettyXML call DoPrettyXML()
 " nerdtree stuff
 " close vim if nerdtree only window left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-

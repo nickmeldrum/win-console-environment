@@ -7,7 +7,7 @@ function SSWebDir {
 }
 
 function SSDiffDir {
-    cd "$($localConfig.scribestarRepo)\src\dita-compare-service"
+    cd "$($localConfig.scribestarRepo)\src\diff.service"
 }
 
 function SSDiffTestsDir {
