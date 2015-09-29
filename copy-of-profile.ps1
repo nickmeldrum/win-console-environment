@@ -16,16 +16,16 @@ $localConfig = get-content ~/localconfig.json -raw | convertfrom-json
 
 import-module "$($localConfig.envrepo)\passwordvault.psm1" -force
 
-$githubToken = (Get-PasswordVaultCredentials 'nicks:githubToken').password
+$githubToken = (Get-PasswordVaultCredentials 'githubToken').password
 
-$githubUsername = (Get-PasswordVaultCredentials 'nicks:githubPassword').username
-$githubPassword = (Get-PasswordVaultCredentials 'nicks:githubPassword').password
+$githubUsername = (Get-PasswordVaultCredentials 'githubPassword').username
+$githubPassword = (Get-PasswordVaultCredentials 'githubPassword').password
 
-$bitbucketUsername = (Get-PasswordVaultCredentials 'nicks:bitbucketToken').username
-$bitbucketToken = (Get-PasswordVaultCredentials 'nicks:bitbucketToken').password
+$bitbucketUsername = (Get-PasswordVaultCredentials 'bitbucketToken').username
+$bitbucketToken = (Get-PasswordVaultCredentials 'bitbucketToken').password
 
-$dnsimpleEmail = (Get-PasswordVaultCredentials 'nicks:dnsimpleToken').username
-$dnsimpleToken = (Get-PasswordVaultCredentials 'nicks:dnsimpleToken').password
+$dnsimpleEmail = (Get-PasswordVaultCredentials 'dnsimpletoken').username
+$dnsimpleToken = (Get-PasswordVaultCredentials 'dnsimpletoken').password
 
 $env:PSModulePath = $env:PSModulePath + ";$($localConfig.envrepo)\3rdparty"
 # Import-Module "PowerTab" -ArgumentList "$userRoot\Documents\WindowsPowerShell\PowerTabConfig.xml"
