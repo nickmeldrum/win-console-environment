@@ -17,6 +17,7 @@ function Set-DotNetEnvironment {
 }
 
 Set-Alias vs "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe"
+Set-Alias vs2015 "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe"
 Set-Alias dotnetsetup Set-DotNetEnvironment
 
 function Echo-DotnetCommands {
