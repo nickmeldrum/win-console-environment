@@ -14,6 +14,7 @@ Plugin 'jlanzarotta/bufexplorer'
 Plugin 'PProvost/vim-ps1'
 Plugin 'marijnh/tern_for_vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'rbgrouleff/bclose.vim'
 " Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 
