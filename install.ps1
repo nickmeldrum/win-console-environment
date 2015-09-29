@@ -18,6 +18,9 @@ cd env
 copy .gitconfig ~/.gitconfig
 copy localconfig.json ~/localconfig.json
 
+# python
+choco install python2 -y
+
 # nodejs
 choco install nodejs -y
 copy .npmrc ~/.npmrc
