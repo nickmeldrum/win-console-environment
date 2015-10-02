@@ -13,7 +13,7 @@
 [branch]
   #autosetuprebase = always         
 [pull]
-  rebase = true
+  #rebase = true
 [diff]
 	tool = bc3
 [difftool "bc3"]
@@ -25,5 +25,5 @@
 [push]
 	default = simple
 [credential]
-	helper = !'C:\\Users\\nick.meldrum\\AppData\\Roaming\\GitCredStore\\git-credential-winstore.exe'
+	helper = !'D:\\nickmeldrum\\gitcredentialstore\\git-credential-winstore\\bin\\Debug\\git-credential-winstore.exe'
 	
