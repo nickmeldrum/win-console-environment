@@ -12,10 +12,14 @@ Plugin 'Lokaltog/vim-distinguished'
 Plugin 'tpope/vim-surround'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'PProvost/vim-ps1'
-Plugin 'marijnh/tern_for_vim'
+Plugin 'mhinz/vim-startify'
 Plugin 'scrooloose/nerdtree'
 Plugin 'rbgrouleff/bclose.vim'
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'mhinz/vim-grepper'
+Plugin 'mattn/emmet-vim'
+"Plugin 'marijnh/tern_for_vim'
+"Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 
 filetype plugin indent on
@@ -73,6 +77,7 @@ set number
 syntax enable
 filetype on
 au BufNewFile,BufRead *.cshtml set filetype=html
+au BufNewFile,BufRead *.ejs set filetype=html
 
 " Who doesn't like autoindent?
 set autoindent
@@ -96,7 +101,7 @@ set expandtab
 " nnoremap ; :
 
 " javascript omnicompletion
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
 
@@ -122,8 +127,8 @@ set t_Co=256
 let &t_AB="\e[48;5;%dm"
 let &t_AF="\e[38;5;%dm"
 "colorscheme zenburn
-colorscheme distinguished
-"colorscheme kolor
+"colorscheme distinguished
+colorscheme kolor
 
 " key mappings
 map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
@@ -164,3 +169,4 @@ command! PrettyXML call DoPrettyXML()
 " nerdtree stuff
 " close vim if nerdtree only window left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
