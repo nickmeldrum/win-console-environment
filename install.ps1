@@ -19,7 +19,8 @@ copy .gitconfig ~/.gitconfig
 copy localconfig.json ~/localconfig.json
 
 # python
-choco install python2 -y
+# choco install python2 -y
+choco install python2-x86_32 -y
 
 # nodejs
 choco install nodejs -y
@@ -52,8 +53,8 @@ copy .vimrc ~/.vimrc
 mkdir ~/.vim/bundle
 cd ~/.vim/bundle
 git clone https://github.com/gmarik/Vundle.vim.git
-cd c:\work\env
 vim +PluginInstall +qall
+
 
 # Setup conemu
 choco install conemu -y
