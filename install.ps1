@@ -1,18 +1,21 @@
+$installRootDir = "c:\work"
+#$installRootDir = "d:\"
+
 #local env
-mkdir c:\work
+mkdir $installRootDir
 
 #git
 choco install git -y -params '"/GitAndUnixToolsOnPath"' --force
 
 # Install my fork of git credential store
-cd c:\work
+cd $installRootDir
 git clone https://nickmeldrum@git01.codeplex.com/forks/nickmeldrum/gitcredentialstore gitcredentialstore
 cd gitcredentialstore
 msbuild
 .\InstallLocalBuild.cmd
 
 # Get my environment settings and files and set them up
-cd c:\work
+cd $installRootDir
 git clone https://nickmeldrum@github.com/nickmeldrum/win-console-environment.git env
 cd env
 copy .gitconfig ~/.gitconfig
@@ -69,3 +72,4 @@ choco install sublimetext2 -y
 # 3rd party application installs
 choco install passwordsafe -y
 choco install dropbox -y
+
