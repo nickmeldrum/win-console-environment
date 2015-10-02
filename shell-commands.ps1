@@ -6,6 +6,10 @@ function Write-Title {
 	write-host $message -ForegroundColor cyan
 }
 
+function fortune {
+    [System.IO.File]::ReadAllText($localconfig.envrepo +'\fortune.txt') -replace "`r`n", "`n" -split "`n%`n" | Get-Random
+}
+
 function Get-ModuleVerbs {
     get-verb | sort verb | format-wide -property verb -column 8
 }
