@@ -1,4 +1,5 @@
-$installRootDir = "d:\"
+param ([string]$installRootDir = "d:\")
+
 $consoleDir = "C:\Program Files\ConEmu"
 $consolePath = "$consoleDir\ConEmu64.exe"
 $envDir = "$installRootDir\env"
@@ -37,13 +38,13 @@ recreate-shortcut-and-pin-it -Source $consolePath -Arguments "/cmd {vim}" `
 
 recreate-shortcut-and-pin-it -Source $consolePath -Arguments "/cmd {cmd}" `
                 -WorkingDir $consoleDir -IconPath "$envDir\cmd.ico" `
-                -Destination "$envDir\vim.lnk" -Hotkey "CTRL+ALT+C" -Description "Powershell in conemu"
+                -Destination "$envDir\cmd.lnk" -Hotkey "CTRL+ALT+C" -Description "Powershell in conemu"
 
 recreate-shortcut-and-pin-it -Source $consolePath -Arguments "/cmd {scribestar}" `
                 -WorkingDir $consoleDir -IconPath "$envDir\scribestar.ico" `
-                -Destination "$envDir\vim.lnk" -Hotkey "CTRL+ALT+S" -Description "Scribestar env in conemu"
+                -Destination "$envDir\scribestar.lnk" -Hotkey "CTRL+ALT+S" -Description "Scribestar env in conemu"
 
 recreate-shortcut-and-pin-it -Source $consolePath -Arguments "/cmd {npmapp}" `
                 -WorkingDir "$installRootDir\nickmeldrum" -IconPath "$envDir\npm.ico" `
-                -Destination "$envDir\vim.lnk" -Hotkey "CTRL+ALT+N" -Description "npm env in conemu"
+                -Destination "$envDir\npm.lnk" -Hotkey "CTRL+ALT+N" -Description "npm env in conemu"
 
