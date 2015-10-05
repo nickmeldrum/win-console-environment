@@ -1,43 +1,116 @@
-#$installRootDir = "c:\work"
-$installRootDir = "d:\"
-$consoleDir = "C:\Program Files\ConEmu"
-$consolePath = "$consoleDir\ConEmu64.exe"
-$envDir = "$installRootDir\env"
+param ([bool]$updatepackages = $false)
+
+$ErrorActionPreference = "Stop"
+
+function idempotent-chocolatey {
+    param ([string]$packagename, [string]$params)
+
+    if ($updatepackages) {
+        write-host "updating $packagename..."
+
+        if ([string]::isnullorwhitespace($params)) {
+            choco upgrade $packagename -y
+        }
+        else {
+            choco upgrade $packagename -y -params $params
+        }
+    }
+    else {
+        write-host "installing $packagename..."
+
+        if ((choco list -lo $packagename | where {$_.contains($packagename)}).count -eq 0) {
+            if ([string]::isnullorwhitespace($params)) {
+                choco install $packagename -y
+            }
+            else {
+                choco install $packagename -y -params $params
+            }
+        }
+    }
+}
+
+function idempotent-gitupdate {
+    param ([string]$repo, [string]$localpath)
+
+    if (-not (test-path $localpath)) {
+        write-host "getting $localpath repository..."
+        git clone $repo $localpath
+        cd $localpath
+    }
+    else {
+        write-host "updating $localpath repository..."
+        cd $localpath
+        git pull
+    }
+}
+
+function refresh-path {
+    $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+}
+
+# test for required installs before continuing
+write-host "checking for pre-reqs: chocolatey and msbuild..."
+where.exe choco
+if ($lastexitcode -eq 1) {
+    write-host "chocolatey not found, please install. Exiting..."
+    return
+}
+where.exe msbuild
+if ($lastexitcode -eq 1) {
+    write-host "msbuild not found, please install. Exiting..."
+    return
+}
+
+if ((new-object system.io.driveinfo("d:\")).drivetype -eq "Fixed") {
+    $installRootDir = "d:\"
+}
+else {
+    $installRootDir = "c:\work"
+}
 
 #local env
-mkdir $installRootDir
+write-host "install root dir is $installRootDir..."
+
+if (-not (test-path $installRootDir)) {
+    $null = mkdir $installRootDir
+}
 
 #git
-choco install git -y -params '"/GitAndUnixToolsOnPath"' --force
+idempotent-chocolatey git '"/GitAndUnixToolsOnPath"'
+refresh-path
 
 # Install my fork of git credential store
 cd $installRootDir
-git clone https://nickmeldrum@git01.codeplex.com/forks/nickmeldrum/gitcredentialstore gitcredentialstore
-cd gitcredentialstore
-msbuild
+idempotent-gitupdate https://nickmeldrum@git01.codeplex.com/forks/nickmeldrum/gitcredentialstore gitcredentialstore
+$null = msbuild
 .\InstallLocalBuild.cmd
 
 # Get my environment settings and files and set them up
 cd $installRootDir
-git clone https://nickmeldrum@github.com/nickmeldrum/win-console-environment.git env
-cd env
-copy .gitconfig ~/.gitconfig
-copy localconfig.json ~/localconfig.json
+idempotent-gitupdate https://nickmeldrum@github.com/nickmeldrum/win-console-environment.git env
+copy .gitconfig ~/.gitconfig -force
+copy localconfig.json ~/localconfig.json -force
 
 # python
-# choco install python2 -y
-choco install python2-x86_32 -y
+idempotent-chocolatey "python2-x86_32"
+refresh-path
 
 # nodejs
-choco install nodejs -y
-copy .npmrc ~/.npmrc
+idempotent-chocolatey nodejs
+copy .npmrc ~/.npmrc -force
 
 # autohotkey
-choco install autohotkey -y
-copy autohotkey.ahk ~/Documents/autohotkey.ahk
+idempotent-chocolatey autohotkey
+copy autohotkey.ahk ~/Documents/autohotkey.ahk -force
+refresh-path
 
 # Setup autohotkey to run and always run on logon
-autohotkey
+if ((Get-Process autohotkey -ErrorAction SilentlyContinue) -eq $null) {
+    autohotkey
+}
+if ((get-scheduledtask -taskname "autohotkey" -erroraction silentlycontinue) -ne $null) {
+    unregister-scheduledtask -taskname "autohotkey" -confirm:$false
+}
 $action = New-ScheduledTaskAction -Execute "C:\Program Files\AutoHotkey\AutoHotkey.exe" -Id "autohotkey"
 $trigger = New-ScheduledTaskTrigger -AtLogOn
 Register-ScheduledTask -Action $action -Trigger $trigger -TaskName "AutoHotkey"
@@ -49,33 +122,39 @@ if (test-path $profile) {
 new-item $profile -force -type file
 copy copy-of-profile.ps1 $profile -force
 cd 3rdparty
-git clone https://github.com/dahlbyk/posh-git.git
-cd ..
+idempotent-gitupdate "https://github.com/dahlbyk/posh-git.git" "posh-git"
 
 # Setup vim
-ren "C:\Program Files\Git\usr\bin\vim.exe" "C:\Program Files\Git\usr\bin\vim.exe.bak"
-choco install vim -y --force
-copy .vimrc ~/.vimrc
-mkdir ~/.vim/bundle
+if (test-path "C:\Program Files\Git\usr\bin\vim.exe") {
+    del "C:\Program Files\Git\usr\bin\vim.exe.bak" -erroraction silentlycontinue -force
+    ren "C:\Program Files\Git\usr\bin\vim.exe" "C:\Program Files\Git\usr\bin\vim.exe.bak" -force
+}
+idempotent-chocolatey vim
+cd $installRootDir\env
+copy .vimrc ~/.vimrc -force
+if (-not (test-path "~/.vim/bundle")) {
+    mkdir ~/.vim/bundle
+}
 cd ~/.vim/bundle
-git clone https://github.com/gmarik/Vundle.vim.git
+idempotent-gitupdate https://github.com/gmarik/Vundle.vim.git Vundle.vim
 vim +PluginInstall +qall
-
+vim +PluginClean +qall
 
 # Setup conemu
-choco install conemu -y
+idempotent-chocolatey conemu
 # import conemu settings
 # create cmd/ vim/ scribestar and npm shortcuts with icons on the taskbar
 
 # Setup sublime text license
-choco install sublimetext2 -y
+idempotent-chocolatey sublimetext2
 
 # Setup diff tool
 
 # 3rd party application installs
-choco install passwordsafe -y
-choco install dropbox -y
+idempotent-chocolatey passwordsafe
+idempotent-chocolatey dropbox
 
 # shortcut creations
-.\shortcuts.ps1 $installRootDir
+cd $installRootDir
+.\env\shortcuts.ps1 $installRootDir
 
