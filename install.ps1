@@ -90,6 +90,7 @@ cd $installRootDir
 idempotent-gitupdate https://nickmeldrum@github.com/nickmeldrum/win-console-environment.git env
 copy .gitconfig ~/.gitconfig -force
 copy localconfig.json ~/localconfig.json -force
+# todo: setup local config settings... e.g. using $env:username...
 
 # python
 idempotent-chocolatey "python2-x86_32"
