@@ -143,7 +143,6 @@ vim +PluginClean +qall
 # Setup conemu
 idempotent-chocolatey conemu
 # import conemu settings
-# create cmd/ vim/ scribestar and npm shortcuts with icons on the taskbar
 
 # Setup sublime text license
 idempotent-chocolatey sublimetext2
