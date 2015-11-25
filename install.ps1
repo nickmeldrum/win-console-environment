@@ -107,7 +107,7 @@ refresh-path
 
 # Setup autohotkey to run and always run on logon
 if ((Get-Process autohotkey -ErrorAction SilentlyContinue) -eq $null) {
-    autohotkey
+    ."C:\Program Files\AutoHotkey\AutoHotkey.exe"
 }
 if ((get-scheduledtask -taskname "autohotkey" -erroraction silentlycontinue) -ne $null) {
     unregister-scheduledtask -taskname "autohotkey" -confirm:$false
