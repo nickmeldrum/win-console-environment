@@ -131,6 +131,7 @@ if (test-path "C:\Program Files\Git\usr\bin\vim.exe") {
     ren "C:\Program Files\Git\usr\bin\vim.exe" "C:\Program Files\Git\usr\bin\vim.exe.bak" -force
 }
 idempotent-chocolatey vim
+refresh-path
 cd $installRootDir\env
 copy .vimrc ~/.vimrc -force
 if (-not (test-path "~/.vim/bundle")) {
