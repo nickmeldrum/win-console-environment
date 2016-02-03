@@ -182,14 +182,14 @@ function Build-ScribeStarSolution
 {
     stopss
     stopssc
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" "$($localConfig.scribestarRepo)\ScribeStar.sln" /t:build
+    & "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe" "$($localConfig.scribestarRepo)\ScribeStar.sln" /t:build
 }
 
 function Build-SystemIntegrationTests
 {
     stopss
     stopssc
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" (Get-TestCsProj "SystemIntegration") /t:build
+    & "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe" (Get-TestCsProj "SystemIntegration") /t:build
 }
 
 function Rebuild-ScribeStarSolution()

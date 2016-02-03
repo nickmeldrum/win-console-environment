@@ -92,5 +92,6 @@ function Echo-GitCommands {
   Write-Host "Get-SpecificBlame file hash startLine numberLines"
   Write-Host "Save-Work: git stash save -u"
   Write-Host "Get-Work: git stash apply"
+  write-host "git grep name -- * :!node_modules     | search for 'name' recursively in all dirs excluding node modules"
 }
 

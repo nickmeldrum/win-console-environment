@@ -10,6 +10,15 @@ function fortune {
     [System.IO.File]::ReadAllText($localconfig.envrepo +'\fortune.txt') -replace "`r`n", "`n" -split "`n%`n" | Get-Random
 }
 
+function unzip-here {
+	param ($filename)
+	
+	$shell_app=new-object -com shell.application
+	$zip_file = $shell_app.namespace((Get-Location).Path + "\$filename")
+	$destination = $shell_app.namespace((Get-Location).Path)
+	$destination.Copyhere($zip_file.items())
+}
+
 function Get-ModuleVerbs {
     get-verb | sort verb | format-wide -property verb -column 8
 }
@@ -35,6 +44,8 @@ function Kill-Node {
 
 Set-Alias killnode Kill-Node
 Set-Alias killmsbuild Kill-MsBuild
+
+set-alias find "C:\Program Files\Git\usr\bin\find.exe"
 
 function List-Colors {
     Write-Title "Powershell console colors:"
@@ -228,6 +239,9 @@ function Echo-VimCommands {
     write-host "zw add word under cursor as bad"
     write-host "z= suggestions"
     write-host ";spellr repeat z= suggestion done for all matches in current window"
+
+    write-host "global commands:"
+    write-host ":g/function/z#.5 = see the context for every line that matches the pattern"
 }
 
 Set-Alias echovim Echo-VimCommands
