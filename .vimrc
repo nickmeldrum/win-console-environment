@@ -35,6 +35,9 @@ set hidden
 " map control -n to next buffer
 :nnoremap <C-n> :bnext<CR>
 
+" Open markdown files with Chrome.
+"autocmd BufEnter *.md exe 'noremap <F5> :!start chrome "%:p"<CR>'
+
 " allow spell check
 "set spell
 "set spelllang=en
@@ -82,6 +85,12 @@ au BufNewFile,BufRead *.ejs set filetype=html
 " Who doesn't like autoindent?
 set autoindent
 
+:nnoremap ' `
+:nnoremap ` '
+
+:nnoremap ; :
+:nnoremap : ;
+
 " when :vs the loaded file will show up on the right
 set splitright
 
@@ -94,11 +103,6 @@ set shiftwidth=4
 set tabstop=4
 " Use spaces instead of tabs
 set expandtab
-
-" make ; act as : - faster command typing
-:nmap ; :
-" this way of doing it was in my old .vimrc no idea what difference it makes
-" nnoremap ; :
 
 " javascript omnicompletion
 " autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
@@ -137,6 +141,15 @@ map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
 command SsWeb cd D:\Prod\src\ScribeStar.Web | !ctags -R .
 command SsRoot cd D:\Prod | !ctags -R .
 
+function! DeleteNextEmptyLine()
+    :normal mz
+    /^\s*$\n/
+    :normal dgn
+    :normal 'z
+endfunction
+
+command! Delnel call DeleteNextEmptyLine()
+
 function! DoPrettyXML()
   " save the filetype so we can restore it later
   let l:origft = &ft
@@ -169,4 +182,3 @@ command! PrettyXML call DoPrettyXML()
 " nerdtree stuff
 " close vim if nerdtree only window left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
