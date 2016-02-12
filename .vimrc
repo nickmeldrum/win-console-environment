@@ -85,11 +85,11 @@ au BufNewFile,BufRead *.ejs set filetype=html
 " Who doesn't like autoindent?
 set autoindent
 
-:nnoremap ' `
-:nnoremap ` '
+nnoremap ' `
+nnoremap ` '
 
-:nnoremap ; :
-:nnoremap : ;
+nnoremap ; :
+nnoremap : ;
 
 " when :vs the loaded file will show up on the right
 set splitright
