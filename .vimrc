@@ -24,6 +24,15 @@ call vundle#end()
 
 filetype plugin indent on
 
+"gvim stuff
+set guioptions -=m
+set guioptions -=T
+set guifont=Consolas:h12:cANSI
+set guioptions -=r
+set guioptions -=R
+set guioptions -=l
+set guioptions -=L
+
 " turn off auto backing up - using google drive or git anyway right? :)
 set nobackup
 set noswapfile
@@ -42,6 +51,9 @@ set hidden
 "set spell
 "set spelllang=en
 
+" so gf knows some files might not include the .js extension in the script
+set suffixesadd+=.js
+
 " line numbers
 " set nu
 set relativenumber
@@ -58,7 +70,7 @@ set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
 " Ignore case when searching
-set ignorecase
+"set ignorecase
 
 " Highlight search results
 set hlsearch
