@@ -5,7 +5,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'zeis/vim-kolor'
 Plugin 'tpope/vim-markdown'
 Plugin 'Lokaltog/vim-distinguished'
@@ -32,6 +32,8 @@ set guioptions -=r
 set guioptions -=R
 set guioptions -=l
 set guioptions -=L
+
+set autoread
 
 " turn off auto backing up - using google drive or git anyway right? :)
 set nobackup
@@ -69,6 +71,22 @@ set nowrap
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
+set wildignore+=node_modules/**
+set wildignore+=packages/**
+set wildignore+=3rdparty/**
+set wildignore+=bower_components/**
+set wildignore+=coverage/**
+set wildignore+=tags
+set wildignore+=target/**
+
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_max_files = 0
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$\|node_modules$\|bower_components$\|packages$\|3rdparty$\|coverage$\|target$',
+  \ 'file': '\v\.(exe|so|dll|class)$'
+  \ }
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
 " Ignore case when searching
 "set ignorecase
 
@@ -82,7 +100,8 @@ set incsearch
 set noerrorbells
 set t_vb=
 set tm=500
-command Nob set vb t_vb=
+command! Nob set vb t_vb=
+set vb t_vb=
 set visualbell
 
 " Line Numbers
@@ -121,15 +140,11 @@ set expandtab
 inoremap <C-Space> <C-x><C-o>
 inoremap <C-@> <C-Space>
 
-"ctrl-p stuff
-let g:ctrlp_custom_ignore = 'node_modules\|.git\|bower_components\|packages|3rdparty'
-let g:ctrlp_working_path_mode = 'r'
-
 " python stuff
-autocmd FileType python nnoremap <buffer> <F9> :w !python<CR>
+autocmd! FileType python nnoremap <buffer> <F9> :w !python<CR>
  
 " markdown stuff
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+autocmd! BufNewFile,BufReadPost *.md set filetype=markdown
 
 " tabbing
 set smartindent
@@ -138,8 +153,10 @@ set shiftwidth=4
 set expandtab
 
 " color scheme for conemu (256 colors)
-set term=xterm
-set t_Co=256
+if has("gui_running")
+else
+    set term=xterm
+endif
 let &t_AB="\e[48;5;%dm"
 let &t_AF="\e[38;5;%dm"
 "colorscheme zenburn
@@ -150,8 +167,9 @@ colorscheme kolor
 map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
 
 " commands
-command SsWeb cd D:\Prod\src\ScribeStar.Web | !ctags -R .
-command SsRoot cd D:\Prod | !ctags -R .
+command! SsWeb cd D:\Prod\src\Web
+command! SsScripts cd D:\Prod\src\Web\scripts\Scribestar
+command! SsRoot cd D:\Prod
 
 function! DeleteNextEmptyLine()
     :normal mz
@@ -161,6 +179,22 @@ function! DeleteNextEmptyLine()
 endfunction
 
 command! Delnel call DeleteNextEmptyLine()
+
+function! AutoIndentFile()
+    :normal mzgg=G'z
+endfunction
+
+command! AI call AutoIndentFile()
+
+function! RemoveTrailingWhitespaceFromFile()
+    :let _s=@/
+    :%s/\s\+$//e
+    :let @/=_s
+endfunction
+
+command! RTW call RemoveTrailingWhitespaceFromFile()
+
+autocmd! BufWritePre *.js :call RemoveTrailingWhitespaceFromFile() | :call AutoIndentFile()
 
 function! DoPrettyXML()
   " save the filetype so we can restore it later
@@ -193,4 +227,5 @@ command! PrettyXML call DoPrettyXML()
 
 " nerdtree stuff
 " close vim if nerdtree only window left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd! bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
