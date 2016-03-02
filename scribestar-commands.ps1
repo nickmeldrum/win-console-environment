@@ -1,9 +1,9 @@
 function SSScriptsDir {
-    cd "$($localConfig.scribestarRepo)\src\ScribeStar.Web\scripts"
+    cd "$($localConfig.scribestarRepo)\src\Web\scripts\scribestar"
 }
 
 function SSWebDir {
-    cd "$($localConfig.scribestarRepo)\src\ScribeStar.Web"
+    cd "$($localConfig.scribestarRepo)\src\Web"
 }
 
 function SSDiffDir {
