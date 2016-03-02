@@ -18,6 +18,7 @@ copyfileifunaltered ".npmrc" "~/.npmrc"
 copyfileifunaltered ".gitconfig" "~/.gitconfig"
 copyfileifunaltered "localconfig.json" "~/localconfig.json"
 copyfileifunaltered "autohotkey.ahk" "~/Documents/autohotkey.ahk"
+copyfileifunaltered "snippets/javascript.snippets" "~/vimfiles/snippets/javascript.snippets"
 
 if (-not [string]::isnullorwhitespace($commitmsg)) {
     echo "commit msg passed in, attempting to commit and push..."

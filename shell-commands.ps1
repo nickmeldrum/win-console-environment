@@ -242,6 +242,9 @@ function Echo-VimCommands {
 
     write-host "global commands:"
     write-host ":g/function/z#.5 = see the context for every line that matches the pattern"
+
+    write-host "folding:"
+    write-host ":set foldmethod=indent then zM to totally fold, zR to totally unfold, zr to unfold 1 level, zm to fold 1 level"
 }
 
 Set-Alias echovim Echo-VimCommands

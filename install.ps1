@@ -141,6 +141,11 @@ cd ~/.vim/bundle
 idempotent-gitupdate https://github.com/gmarik/Vundle.vim.git Vundle.vim
 vim +PluginInstall +qall
 vim +PluginClean +qall
+if (-not (test-path "~/vimfiles/snippets")) {
+    mkdir ~/vimfiles/snippets
+}
+cd $installRootDir
+copy snippets\* ~/vimfiles/snippets
 
 # Setup conemu
 idempotent-chocolatey conemu
