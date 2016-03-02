@@ -20,6 +20,10 @@ Plugin 'mhinz/vim-grepper'
 Plugin 'mattn/emmet-vim'
 "Plugin 'marijnh/tern_for_vim'
 "Plugin 'Valloric/YouCompleteMe'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'isRuslan/vim-es6'
 call vundle#end()
 
 filetype plugin indent on
@@ -116,6 +120,7 @@ au BufNewFile,BufRead *.ejs set filetype=html
 " Who doesn't like autoindent?
 set autoindent
 
+" evil remaps from hell
 nnoremap ' `
 nnoremap ` '
 
@@ -163,8 +168,7 @@ let &t_AF="\e[38;5;%dm"
 "colorscheme distinguished
 colorscheme kolor
 
-" key mappings
-map <F4> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+inoremap jk <ESC>
 
 " commands
 command! SsWeb cd D:\Prod\src\Web
@@ -228,4 +232,6 @@ command! PrettyXML call DoPrettyXML()
 " nerdtree stuff
 " close vim if nerdtree only window left open
 autocmd! bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+set foldmethod=indent
 
