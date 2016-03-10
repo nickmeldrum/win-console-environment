@@ -1,9 +1,13 @@
-param ([bool]$updatepackages = $false)
+param ([bool]$ignorepackages = $false)
 
 $ErrorActionPreference = "Stop"
 
 function idempotent-chocolatey {
     param ([string]$packagename, [string]$params)
+
+    if ($ignorepackages) {
+        return
+    }
 
     if ($updatepackages) {
         write-host "updating $packagename..."
@@ -134,6 +138,7 @@ idempotent-chocolatey vim
 refresh-path
 cd $installRootDir\env
 copy .vimrc ~/.vimrc -force
+copy .gvimrc ~/.gvimrc -force
 if (-not (test-path "~/.vim/bundle")) {
     mkdir ~/.vim/bundle
 }
@@ -144,7 +149,7 @@ vim +PluginClean +qall
 if (-not (test-path "~/vimfiles/snippets")) {
     mkdir ~/vimfiles/snippets
 }
-cd $installRootDir
+cd $installRootDir\env
 copy snippets\* ~/vimfiles/snippets
 
 # Setup conemu
