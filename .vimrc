@@ -238,6 +238,8 @@ endfunction
 
 autocmd! BufWritePre *.js :call RemoveTrailingWhitespaceFromFile() | :call AutoIndentFile()
 
+nmap <C-A> mzggvG
+
 function! DoPrettyXML()
   " save the filetype so we can restore it later
   let l:origft = &ft
