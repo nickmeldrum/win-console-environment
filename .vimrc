@@ -28,6 +28,36 @@ call vundle#end()
 
 filetype plugin indent on
 
+:set laststatus=2
+
+function! InsertStatuslineColor(mode)
+  if a:mode == 'i'
+    hi statusline guibg=Cyan ctermfg=6 guifg=Black ctermbg=0
+  elseif a:mode == 'r'
+    hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
+  else
+    hi statusline guibg=Red ctermfg=1 guifg=Black ctermbg=0
+  endif
+endfunction
+
+au InsertEnter * call InsertStatuslineColor(v:insertmode)
+au InsertLeave * hi statusline guibg=LightYellow ctermfg=8 guifg=Black ctermbg=15
+
+set statusline=%f         " Path to the file
+set statusline+=\ -\      " Separator
+set statusline+=%y        " Filetype of the file
+set statusline+=%m      "modified flag
+set statusline+=%r      "read only flag
+set statusline+=\ -\      " Separator
+set statusline+=%l    " Current line
+set statusline+=/    " Separator
+set statusline+=%L   " Total lines
+set statusline+=[    " Separator
+set statusline+=%c    " Current col
+set statusline+=]    " Separator
+set statusline+=\ -\      " Separator
+set statusline+=%{fugitive#statusline()} "git status
+
 "gvim stuff
 set guioptions -=m
 set guioptions -=T
@@ -82,11 +112,12 @@ set wildignore+=bower_components/**
 set wildignore+=coverage/**
 set wildignore+=tags
 set wildignore+=target/**
+set wildignore+=.teamcity/**
 
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_max_files = 0
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$\|node_modules$\|bower_components$\|packages$\|3rdparty$\|coverage$\|target$',
+  \ 'dir':  '\v[\/]\.(git|hg|svn|teamcity|vs)$\|node_modules$\|bower_components$\|packages$\|3rdparty$\|coverage$\|target$',
   \ 'file': '\v\.(exe|so|dll|class)$'
   \ }
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
@@ -196,6 +227,14 @@ function! RemoveTrailingWhitespaceFromFile()
 endfunction
 
 command! RTW call RemoveTrailingWhitespaceFromFile()
+
+function! AddCatchToEndOfThen()
+    :%s/^\(\s*\)});/\1})\r\1.catch((err) => { window.console.error(err);});/gc
+endfunction
+
+"following is a copy of my i register that allows me to turn requires into
+"imports in js
+"cwimportf=vf(cfrom f)dl
 
 autocmd! BufWritePre *.js :call RemoveTrailingWhitespaceFromFile() | :call AutoIndentFile()
 
