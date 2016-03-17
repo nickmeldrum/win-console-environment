@@ -28,6 +28,8 @@ call vundle#end()
 
 filetype plugin indent on
 
+set diffopt+=vertical
+
 :set laststatus=2
 
 function! InsertStatuslineColor(mode)
@@ -44,18 +46,17 @@ au InsertEnter * call InsertStatuslineColor(v:insertmode)
 au InsertLeave * hi statusline guibg=LightYellow ctermfg=8 guifg=Black ctermbg=15
 
 set statusline=%f         " Path to the file
-set statusline+=\ -\      " Separator
+set statusline+=\      " Separator
 set statusline+=%y        " Filetype of the file
 set statusline+=%m      "modified flag
 set statusline+=%r      "read only flag
-set statusline+=\ -\      " Separator
+set statusline+=\      " Separator
+set statusline+=%c    " Current col
+set statusline+=/    " Separator
 set statusline+=%l    " Current line
 set statusline+=/    " Separator
 set statusline+=%L   " Total lines
-set statusline+=[    " Separator
-set statusline+=%c    " Current col
-set statusline+=]    " Separator
-set statusline+=\ -\      " Separator
+set statusline+=\      " Separator
 set statusline+=%{fugitive#statusline()} "git status
 
 "gvim stuff
