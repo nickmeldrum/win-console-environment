@@ -28,6 +28,8 @@ call vundle#end()
 
 filetype plugin indent on
 
+au GUIEnter * simalt ~x
+
 :command! -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 set diffopt+=vertical
 
@@ -244,6 +246,8 @@ command! MakeBig set guifont=Consolas:h18:cANSI
 command! MakeSmall set guifont=Consolas:h12:cANSI
 command! GL :diffget //2
 command! GR :diffget //3
+
+command! RemoveBadNewLines :%s///g
 
 nmap <C-A> mzggvG
 
