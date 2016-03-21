@@ -240,6 +240,11 @@ endfunction
 
 autocmd! BufWritePre *.js :call RemoveTrailingWhitespaceFromFile() | :call AutoIndentFile()
 
+command! MakeBig set guifont=Consolas:h18:cANSI
+command! MakeSmall set guifont=Consolas:h12:cANSI
+command! GL :diffget //2
+command! GR :diffget //3
+
 nmap <C-A> mzggvG
 
 function! DoPrettyXML()
