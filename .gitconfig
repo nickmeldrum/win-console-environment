@@ -10,10 +10,7 @@
   unstage = reset HEAD --
   last = log -1 HEAD
   files = "!f() { git diff --name-status $1^!; }; f"
-[branch]
-  #autosetuprebase = always         
 [pull]
-  #rebase = true
     rebase = false
 [diff]
 	tool = bc3
@@ -23,11 +20,12 @@
 	tool = fugitive
 [mergetool "bc3"]
 	path = c:/Program Files (x86)/Beyond Compare 3/bcomp.exe
+[mergetool "fugitive"]
+	cmd = gvim -f -c Gvdiff $MERGED
 [push]
 	default = simple
-[credential]
-	
 [core]
+    editor = gvim -f
 	longpaths = true
 	autocrlf = true
 [filter "lfs"]
@@ -36,5 +34,4 @@
 	required = true
 [credential]
 	helper = !'D:\\nickmeldrum\\gitcredentialstore\\git-credential-winstore\\bin\\Debug\\git-credential-winstore.exe'
-[mergetool "fugitive"]
-	cmd = gvim -f -c Gvdiff $MERGED
+
