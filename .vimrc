@@ -28,6 +28,8 @@ call vundle#end()
 
 filetype plugin indent on
 
+:command! -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
+
 :set laststatus=2
 
 function! InsertStatuslineColor(mode)
