@@ -24,11 +24,18 @@ Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
 Plugin 'isRuslan/vim-es6'
+Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-dispatch'
+Plugin 'OmniSharp/omnisharp-vim'
+"Plugin 'OmniSharp/omnisharp-roslyn'
 call vundle#end()
 
 filetype plugin indent on
 
 au GUIEnter * simalt ~x
+
+"let mapleader = ","
+"let g:mapleader = ","
 
 :command! -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 set diffopt+=vertical
@@ -72,6 +79,49 @@ set guioptions -=l
 set guioptions -=L
 
 set autoread
+
+let g:syntastic_javascript_checkers = ['jshint']
+"let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+"let g:syntastic_cs_checkers = ['code_checker']
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_always_populate_loc_list=1
+
+"let g:OmniSharp_server_type = 'v1'
+"let g:OmniSharp_server_type = 'roslyn'
+
+let g:OmniSharp_selector_ui = 'ctrlp'
+
+autocmd! BufWritePost *.cs call OmniSharp#AddToProject()
+autocmd! CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+
+autocmd! FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
+command! CsGotoDef OmniSharpGotoDefinition
+autocmd! FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
+command! CsFindImpl OmniSharpFindImplementations
+autocmd! FileType cs nnoremap <leader>ft :OmniSharpFindType<cr>
+command! CsFindType OmniSharpFindType
+autocmd! FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<cr>
+autocmd! FileType cs nnoremap <leader>fu :OmniSharpFindUsages<cr>
+command! CsFindUsages OmniSharpFindUsages
+"finds members in the current buffer
+autocmd! FileType cs nnoremap <leader>fm :OmniSharpFindMembers<cr>
+command! CsFindMembers OmniSharpFindMembers
+" cursor can be anywhere on the line containing an issue
+autocmd! FileType cs nnoremap <leader>x  :OmniSharpFixIssue<cr>
+autocmd! FileType cs nnoremap <leader>fx :OmniSharpFixUsings<cr>
+autocmd! FileType cs nnoremap <leader>tt :OmniSharpTypeLookup<cr>
+autocmd! FileType cs nnoremap <leader>dc :OmniSharpDocumentation<cr>
+"navigate up by method/property/field
+autocmd! FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
+"navigate down by method/property/field
+autocmd! FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
+
+autocmd! BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+autocmd! BufEnter,TextChanged,InsertLeave *.js SyntasticCheck
+
+
 
 " turn off auto backing up - using google drive or git anyway right? :)
 set nobackup
@@ -279,6 +329,55 @@ function! DoPrettyXML()
   exe "set ft=" . l:origft
 endfunction
 command! PrettyXML call DoPrettyXML()
+
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+function! s:RunShellCommand(cmdline)
+  echo a:cmdline
+  let expanded_cmdline = a:cmdline
+  for part in split(a:cmdline, ' ')
+     if part[0] =~ '\v[%#<]'
+        let expanded_part = fnameescape(expand(part))
+        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+     endif
+  endfor
+  botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:    ' . a:cmdline)
+  call setline(2, 'Expanded Form:  ' .expanded_cmdline)
+  call setline(3,substitute(getline(2),'.','=','g'))
+  execute '$read !'. expanded_cmdline
+  setlocal nomodifiable
+  1
+endfunction
+
+command! Build Shell powershell build
+command! ReBuild Shell powershell rebuild
+command! BuildCollab Shell powershell buildcollab
+command! BuildCollabTests Shell powershell buildcollabtests
+command! BuildComment Shell powershell buildcomment
+command! BuildCommentTests Shell powershell buildcommenttests
+command! BuildCheck Shell powershell buildcheck
+command! BuildCheckTests Shell powershell buildchecktests
+command! BuildVer powershell buildver
+command! BuildVerTests powershell buildvertests
+
+command! DebugWeb Shell powershell debugweb
+command! DebugCollab Shell powershell debugcollab
+command! DebugComment Shell powershell debugcomment
+command! DebugCheck Shell powershell debugcheck
+command! DebugVer Shell powershell debugver
+
+command! TestAll Shell powershell testall
+command! TestAllNoSeleniumOrPerf Shell powershell testall-exceptseleniumorperf
+command! TestCollab Shell powershell testcollab
+command! TestComment Shell powershell testcommand
+command! TestCheck Shell powershell testcheck
+command! TestVer Shell powershell testver
+command! TestDiff Shell powershell testdiff
+
+command! StartSS Shell powershell startss
+command! StopSS Shell powershell stopss
+command! ListSS Shell powershell listss
 
 " nerdtree stuff
 " close vim if nerdtree only window left open
