@@ -245,6 +245,8 @@ function Echo-VimCommands {
 
     write-host "folding:"
     write-host ":set foldmethod=indent then zM to totally fold, zR to totally unfold, zr to unfold 1 level, zm to fold 1 level"
+
+    write-host "csharp stuff"
 }
 
 Set-Alias echovim Echo-VimCommands

@@ -1,53 +1,106 @@
-function SSScriptsDir {
-    cd "$($localConfig.scribestarRepo)\src\Web\scripts\scribestar"
+######
+## Notes:
+## Usually I write the functions I expect to be publicly used in a shorthand "non-powershelly" way and the private functions in the "powershell" horrible verb-noun style
+##
+## Pre-reqs:
+## If your git repo is in a non-standard place (i.e. not "D:\Work\Product"): A global PS object called "localConfig" which has a property called "scribestarRepo" pointing to the root of your Git repo
+## Standalone nunit 3.2.0 to be installed
+## VS2015 to be installed in default place for msbuild
+## To get the growl test integrations working you have to have Growl for Windows installed.
+##
+#####
+
+function IfNull($a, $b, $c) { if ($a -eq $null) { $b } else { $c } }
+
+$repoRoot = (IfNull $localConfig.scribestarRepo "D:\Work\Product" $localConfig.scribestarRepo)
+
+#################################
+### Directory traversal
+#################################
+
+function SsRootDir { cd $repoRoot }
+function SsWebDir { cd "$($repoRoot)\src\Web" }
+function SsScriptsDir { cd "$($repoRoot)\src\Web\scripts\scribestar" }
+function SsCSSDir { cd "$($repoRoot)\src\Web\sass" }
+function SsCollabDir { cd "$($repoRoot)\src\Collaboration" }
+function SsCollabTestsDir { cd "$($repoRoot)\src\Collaboration.Tests" }
+function SsCommentingDir { cd "$($repoRoot)\src\Commenting" }
+function SsCommentingTestsDir { cd "$($repoRoot)\src\Commenting.Tests" }
+function SsChecklistingDir { cd "$($repoRoot)\src\Checklisting" }
+function SsChecklistingTestsDir { cd "$($repoRoot)\src\Checklisting.Tests" }
+function SsVerificationDir { cd "$($repoRoot)\src\Verification" }
+function SsVerificationTestsDir { cd "$($repoRoot)\src\Verification.Tests" }
+function SsDiffDir { cd "$($repoRoot)\src\diff.service" }
+function SsDiffTestsDir { cd "$($repoRoot)\src\Diff.Service.Tests" }
+
+#################################
+### Services
+#################################
+
+function StartSS { gsv | where {$_.name -like 'ScribeStar*'} | Start-Service; gsv | where {$_.name -like 'ScribeStar*'} }
+function StopSS { gsv | where {$_.name -like 'ScribeStar*'} | Stop-Service; gsv | where {$_.name -like 'ScribeStar*'} }
+function ListSS { gsv | where {$_.name -like 'ScribeStar*'}; Get-Process 'ScribeStar*' | Format-Table }
+
+#################################
+### Building
+#################################
+
+function Run-MsBuild
+{
+    param ($proj, $buildtype="build")
+    & "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe" "$($repoRoot)\$proj" /t:$buildtype /p:SolutionDir="$($repoRoot)"
 }
 
-function SSWebDir {
-    cd "$($localConfig.scribestarRepo)\src\Web"
+function build { stopss; Run-MsBuild "Scribestar.sln" }
+function rebuild { stopss; Run-MsBuild "Scribestar.sln" "Rebuild" }
+function buildweb { Run-MsBuild "src\Web\Web.csproj" }
+function buildcollab { Run-MsBuild "src\Collaboration\Collaboration.csproj" }
+function buildcollabtests { Run-MsBuild "src\Collaboration.Tests\Collaboration.Tests.csproj" }
+function buildcomment { Run-MsBuild "src\Commenting\Commenting.csproj" }
+function buildcommenttests { Run-MsBuild "src\Commenting.Tests\Commenting.Tests.csproj" }
+function buildcheck { Run-MsBuild "src\Checklisting\Checklisting.csproj" }
+function buildchecktests { Run-MsBuild "src\Checklisting.Tests\Checklisting.Tests.csproj" }
+function buildver { Run-MsBuild "src\Verification\Verification.csproj" }
+function buildvertests { Run-MsBuild "src\Verification.Tests\Verification.Tests.csproj" }
+
+#################################
+### Debugging
+#################################
+
+function Debug-WebProcessByOwner
+{
+    param ([string]$owner)
+    add-type -AssemblyName microsoft.VisualBasic; add-type -AssemblyName System.Windows.Forms
+    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq $owner}).ProcessId
+    start-sleep -Milliseconds 500
+    [Microsoft.VisualBasic.Interaction]::AppActivate("Visual Studio Just-In-Time Debugger")
+    [System.Windows.Forms.SendKeys]::SendWait("(%P){END}(%M) ")
 }
 
-function SSDiffDir {
-    cd "$($localConfig.scribestarRepo)\src\diff.service"
-}
+function debugweb { Debug-WebProcessByOwner "Scribestar" }
+function debugcollab { Debug-WebProcessByOwner "Collaboration" }
+function debugcomment { Debug-WebProcessByOwner "Commenting" }
+function debugcheck { Debug-WebProcessByOwner "Checklisting" }
+function debugver { Debug-WebProcessByOwner "Verification" }
 
-function SSDiffTestsDir {
-    cd "$($localConfig.scribestarRepo)\src\ScribeStar.SystemIntegrationTests\Diff"
-}
+#################################
+### Testing
+#################################
 
-function SSRootDir {
-    cd $localConfig.scribestarRepo
-}
+import-module $psscriptroot\send-growl.psm1
+Register-GrowlType "Scribestar Server Tests" "Succeeded" "$psscriptroot\scribestar-tick.ico"
+start-sleep -m 100
+Register-GrowlType "Scribestar Server Tests" "Failed" "$psscriptroot\scribestar-cross.ico"
 
-function Start-ScribeStarServices {
-    gsv | where {$_.name -like 'ScribeStar*'} | Start-Service
-    gsv | where {$_.name -like 'ScribeStar*'}
-}
+function Clean-AsmName {
+    param ([string]$asmName)
 
-function Stop-ScribeStarServices {
-    gsv | where {$_.name -like 'ScribeStar*'} | Stop-Service
-    gsv | where {$_.name -like 'ScribeStar*'}
-}
-
-function Start-ScribeStarConsoleServices {
-    Start-ProcessIfNotRunning "ScribeStar.Notifications.Service" "$($localCOnfig.scribestarRepo)\src\ScribeStar.Notifications.Service\bin\Debug\ScribeStar.Notifications.Service.exe"
-}
-
-function Stop-ScribeStarConsoleServices {
-    Stop-ProcessIfStarted "ScribeStar.Notifications.Service"
-}
-
-function List-ScribeStarServiceStatus {
-    gsv | where {$_.name -like 'ScribeStar*'}
-    Get-Process 'ScribeStar*' | Format-Table
+    return [System.IO.Path]::GetFileNameWithoutExtension($asmName) -replace "(ScribeStar\.|\.Tests|\.Service|Proxy\.)*", ""
 }
 
 function Run-Nunit {
-    param (
-        [string[]]$assemblies,
-        [string]$spec
-    )
-
-    $nunitPath = "`"C:\Program Files (x86)\NUnit 2.6.4\bin\nunit-console.exe`""
+    param ([string[]]$assemblies, [string]$spec)
+    $nunitPath = "`"C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe`""
 
     if ($assemblies -eq $null -or $assemblies.Count -eq 0) {
         Throw "you must include an assembly!"
@@ -59,8 +112,6 @@ function Run-Nunit {
         $argList = $argList += " /run=$spec"
     }
 
-#$argList = $argList += " /output=test-output.xml"
-
     echo "============================================"
     echo "Nunit command:"
     echo $argList
@@ -71,18 +122,37 @@ function Run-Nunit {
 
     [xml]$testresults = cat .\TestResult.xml
 
-    echo "TODO: growl this!"
-    echo ("Total tests: " + $testresults."test-results".total)
-    echo ("Tests ignored: " + $testresults."test-results".ignored)
-    echo ("Test errors: " + $testresults."test-results".errors)
-    echo ("Test failures: " + $testresults."test-results".failures)
+    $succeeded = (select-xml "//test-run/@result" $testresults).Node."#text" -eq "Passed"
+    $total = (select-xml "//test-run/@total" $testresults).Node."#text"
+    $failedNumber = (select-xml "//test-case[@result='Failed']" $testresults).Length
+    $passedNumber = (select-xml "//test-case[@result='Passed']" $testresults).Length
+    $ignoredNumber = (select-xml "//test-case[@result='Skipped']" $testresults).Length
 
-    if ($testresults."test-results".failures -ne "0") {
-        echo "test assemblies that didn't succeed (possibly ignored or failed):"
-        select-xml "//test-suite[@result!='Success' and @type='Assembly']/@name" $testresults | % {$_.Node.'#text'}
-        echo "test cases that FAILED:"
-        select-xml "//test-case[@result='Failure']/@name" $testresults | % {$_.Node.'#text'}
+    $failedAssemblies = (select-xml "//test-suite[@result!='Passedd' and @type='Assembly']/@name" $testresults | % {clean-asmname $_.Node.'#text'}) -join ", "
+    $failedTestNames = ((select-xml "//test-case[@result='Failed']" $testresults).Node.name) -join ", "
+    $assertionFailures = ((select-xml "//test-case[@result='Failed']/failure/message/text()" $testresults).Node.Value) -join ", "
+
+#    echo "succeeded $succeeded"
+#    echo "total $total"
+#    echo "failedNumber $failedNumber"
+#    echo "passedNumber $passedNumber"
+#    echo "ignoredNumber $ignoredNumber"
+#    echo "failedAssemblies $failedAssemblies"
+#    echo "failedTestNames $failedTestNames"
+#    echo "assertionFailures $assertionFailures"
+
+    if ($succeeded) {
+        $type = "Succeeded"
+        $caption = "Tests passed!"
+        $msg = "$passedNumber/$total passed. $ignoredNumber ignored. Give yerself a pat on the back."
     }
+    else {
+        $type = "Failed"
+        $caption = "Tests failed!"
+        $msg = "$failedNumber/$total failed. Tests: $failedTestNames. Assertions: $assertionFailures"
+    }
+
+    Send-Growl "Scribestar Server Tests" $type $caption $msg
 }
 
 $projectFiles = @()
@@ -112,8 +182,6 @@ Function String-ContainsCaseInsensitive {
 
     return $original.indexof($contains, [System.StringComparison]::OrdinalIgnoreCase) -ge 0
 }
-
-function IfNull($a, $b, $c) { if ($a -eq $null) { $b } else { $c } }
 
 Function List-TestProjectFiles {
     param ([string[]]$include, [string[]]$exclude)
@@ -150,70 +218,18 @@ Function Get-AssemblyFromTestProjectFiles {
     return $assemblyNames
 }
 
-function Test-WholeSuite {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles)
-}
+function testall { Run-Nunit (Get-AssemblyFromTestProjectFiles) }
+function testall-execptseleniumorperf { Run-Nunit (Get-AssemblyFromTestProjectFiles -exclude "Automated") }
+function testselenium { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Automated") }
+function testcollab { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Collaboration") }
+function testcheck { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Checklisting") }
+function testcomment { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Commenting") }
+function testver { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Verification") }
+function testdiff { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Diff") }
 
-function Test-AllExceptBrowser {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles -exclude "Automated")
-}
-
-function Test-Browser {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Automated")
-}
-
-function Test-Checklisting {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Checklisting")
-}
-
-function Test-SystemIntegration {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "SystemIntegration")
-}
-
-function Test-Bookmarking {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "SystemIntegration") "ScribeStar.SystemIntegrationTests.Bookmarking"
-}
-
-function Test-Diff {
-    Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Diff")
-}
-
-function Build-ScribeStarSolution
-{
-    stopss
-    stopssc
-    & "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe" "$($localConfig.scribestarRepo)\ScribeStar.sln" /t:build
-}
-
-function Build-SystemIntegrationTests
-{
-    stopss
-    stopssc
-    & "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe" (Get-TestCsProj "SystemIntegration") /t:build
-}
-
-function Rebuild-ScribeStarSolution()
-{
-    stopss
-    stopssc
-    & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe" compile.msbuild /p:Configuration=Debug /t:Rebuild /v:m /m
-    startss
-}
-
-function Debug-Web
-{
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar"}).ProcessId
-}
-
-function Debug-WebApi
-{
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "w3wp.exe" -and $_.getowner().user -eq "Scribestar.WebApi"}).ProcessId
-}
-
-function Debug-NotificationsService
-{
-    vsjitdebugger -p (gwmi win32_process | where {$_.Name -eq "ScribeStar.Notifications.Service.exe"}).ProcessId
-}
+#################################
+### Miscellaneous
+#################################
 
 function Make-DevCert
 {
@@ -221,70 +237,34 @@ function Make-DevCert
     makecert.exe -n "CN=development.scribestar.internal" -pe -ss My -sr LocalMachine -sky exchange -m 120 -in "Nicks Fake Root CA" -is Root -ir LocalMachine -a sha1 -eku 1.3.6.1.5.5.7.3.1
 }
 
-#function Update-ActualSiteCss {
-#    $folder = 'D:\prod\src\scribestar.web\sass'
-#    $filter = 'site.css'
-#     
-#    $fsw = New-Object IO.FileSystemWatcher $folder, $filter -Property @{IncludeSubdirectories = $false;NotifyFilter = [IO.NotifyFilters]'FileName, LastWrite'}
-
-#    Register-ObjectEvent $fsw Created -SourceIdentifier FileCreated -Action { 
-#        $name = $Event.SourceEventArgs.Name 
-#        $changeType = $Event.SourceEventArgs.ChangeType 
-#        $timeStamp = $Event.TimeGenerated 
-
-#        #Out-File -FilePath d:\work\scratch\UpdateActualSiteCss.log -Append -InputObject "The file '$name' was $changeType at $timeStamp"
-
-#        copy D:\prod\src\scribestar.web\sass\site.css D:\prod\src\ScribeStar.Web\content\site.css
-#        del D:\prod\src\scribestar.web\sass\site.css
-#    }  
-
-
-#    Register-ObjectEvent $fsw Changed -SourceIdentifier FileChanged -Action { 
-#        $name = $Event.SourceEventArgs.Name 
-#        $changeType = $Event.SourceEventArgs.ChangeType 
-#        $timeStamp = $Event.TimeGenerated 
-#        
-#        #Out-File -FilePath d:\work\scratch\UpdateActualSiteCss.log -Append -InputObject "The file '$name' was $changeType at $timeStamp"
-
-#        copy D:\prod\src\scribestar.web\sass\site.css D:\prod\src\ScribeStar.Web\content\site.css
-#        del D:\prod\src\scribestar.web\sass\site.css
-
-#    } 
-
-#    write-host "compass watch --css-dir src\scribestar.web\sass --sass-dir src\scribestar.web\sass\styles --output-style expanded"
-#}
-
-Set-Alias startss Start-ScribeStarServices
-Set-Alias stopss Stop-ScribeStarServices
-Set-Alias startssc Start-ScribeStarConsoleServices
-Set-Alias stopssc Stop-ScribeStarConsoleServices
-Set-Alias listss List-ScribeStarServiceStatus
-Set-Alias build Build-ScribeStarSolution
-Set-Alias rebuild Rebuild-ScribeStarSolution
+function Write-Title { param ([string]$message) write-host $message -ForegroundColor cyan }
+function Write-SubTitle { param ([string]$message) write-host $message -ForegroundColor darkcyan }
 
 function Echo-ScribestarCommands {
     Write-Title "Scribestar Commands:"
 
-    Write-Host "stopss                                  | Stop ScribeStar Services as service (Notification, Document and Transaction)"
-    Write-Host "startss                                 | Start ScribeStar Services as service (Notification, Document and Transaction)"
-    Write-Host "stopssc                                 | Stop ScribeStar Services as console host (Notification, Document and Transaction)"
-    Write-Host "startssc                                | Start ScribeStar Services as console host (Notification, Document and Transaction)"
-    Write-Host "listss                                  | List ScribeStar Services to see if they are running as services or console (Notification, Document and Transaction)"
-    Write-host "build                                   | Build ScribeStar Solutions"
-    Write-host "rebuild                                 | Rebuild ScribeStar Solutions"
-    Write-host "debug-web or debug-webapi               | Debug ScribeStar Web or web api"
-    Write-host "Debug-NotificationsService              | Debug notifications service or console"
-    Write-host "SSScriptsDir SSWebDir SSDiffDir SSDiffTestsDir SSRootDir                   | move to directories in solution"
-    Write-host "List-TestProjectFiles -include strarry -exclude strarray        | List all test project files"
-    Write-host "Get-AssemblyFromTestProjectFiles -include strarray -exclude strarray        | List all tests assemblies to pass into Run-Nunit"
-    Write-host "Run-Nunit asmList ns                    | Run unit tests, e.g. Run-Nunit `$asmList `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
-    Write-host "Test-WholeSuite                         | nunit test everything including selenium stuff"
-    Write-host "Test-AllExceptBrowser                   | nunit test everything except selenium stuff"
-    Write-host "Test-Browser                            | nunit test only selenium stuff"
-    Write-host "Test-Checklisting"
-    Write-host "Test-SystemIntegration"
-    Write-host "Test-Diff"
-    Write-host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET  | list all attachments in local ravendb"
+    Write-SubTitle "Change Directory Commands:"
+    Write-Host "SsRootDir, SsWebDir, SsScriptsDir, SsCSSDir"
+    Write-Host "SsCollabDir, SsCommentingDir, SsChecklistingDir, SsVerificationDir, SsDiffDir"
+    Write-Host "SsCollabTestsDir, SsCommentingTestsDir, SsChecklistingTestsDir, SsVerificationTestsDir, SsDiffTestsDir"
+
+    Write-SubTitle "Service Commands:"
+    Write-Host "stopss, startss, listss"
+
+    Write-SubTitle "Build Commands:"
+    Write-Host "build, rebuild, buildweb, buildcollab, buildcollabtests, buildcomment, buildcommenttests, buildcheck, buildchecktests, buildver, buildvertests"
+
+    Write-SubTitle "Debug Commands:"
+    Write-Host "debugweb, debugcollab, debugcomment, debugcheck, debugver"
+
+    Write-SubTitle "Test Commands:"
+    Write-Host "testall, testall-exceptselenium, testselenium, testcollab, testcheck, testcomment, testver, testdiff"
+    Write-Host "List-TestProjectFiles -include strarry -exclude strarray                    | List all test project files"
+    Write-Host "Get-AssemblyFromTestProjectFiles -include strarray -exclude strarray        | List all tests assemblies to pass into Run-Nunit"
+    Write-Host "Run-Nunit asmList namespace                                                 | Run unit tests, e.g. Run-Nunit `$asmList `"ScribeStar.Document.Service.Tests.SystemIntegrationTests`""
+
+    Write-SubTitle "Misc helpful stuff:"
+    Write-Host "curl -Uri `"http://localhost:8080/static/?start=0&pagesize=128`" -Method GET             | list all attachments in local ravendb"
     Write-Host "gci D:\prod\web\scribestar.web\sass\styles -recurse | Select-String -Pattern `"pattern`" | look for pattern in sass files recursively"
 }
  
