@@ -163,33 +163,6 @@ function Echo-VimCommands {
     Write-Host ":'<,'>s/search/search/g                 | Search and replace each match in range selected via visual mode (visually select range then hit :)"
     Write-Host ":%s/search/replace/g                    | Search and replace globally in whole file"
 
-    Write-Subtitle "Swapping text:"
-    Write-Host "xp                                      | Swap the current character (the character under the cursor) with the next"
-    Write-Host "Xp                                      | Swap the current character with the previous"
-    Write-Host "dawwP                                   | Swap the current word with the next"
-    Write-Host "dawbP                                   | Swap the current word with the previous"    
-    Write-Host "ddp                                     | Swap the current line with the next"
-    Write-Host "ddkP                                    | Swap the current line with the previous"    
-
-
-    Write-Host "Vim shortcuts"
-
-    Write-Host "Help"
-    Write-Host ":help command will open up vim help in a split about that command"
-
-    Write-Host "Splits"
-    Write-Host ":sp or ctrl-w n or v to create a new split normal or vertical"
-    Write-Host "ctrl-w <dir> move between splits"
-    Write-Host "ZQ or ZZ close current window either saving or not saving respectively"
-    Write-Host "ctrl-w q close current split"
-    Write-Host ":on or ctrl-w o make current window the only visible window"
-
-    Write-Host "Opening files"
-    Write-Host ":new"
-    Write-Host ":edit"
-    Write-Host ":tabe"
-    Write-Host ":find **\Dom** find any file with Dom at the start of the name and open it"
-
     Write-Host "Tabs"
     Write-Host ":tabe or :tabnew file open a file in a new tab (edit or new)"
     Write-Host ":tabf for find a file and open in new tab"
@@ -197,56 +170,6 @@ function Echo-VimCommands {
     Write-Host ":tabp or :tabN for previous and next tab"
     Write-Host ":tabc tabclose"
     Write-Host ":tabo close all other tabs"
-
-    Write-Host "quitting"
-    Write-Host ":q! quit without saving (or close current tab)"
-    Write-Host ":wq write and quit"
-    Write-Host ":w write with optional filename"
-
-    Write-Host "cut copy paste"
-    Write-Host "v visual mode"
-    Write-Host "shift-v select whole lines"
-    Write-Host "ctrl-v select columns"
-
-    Write-Host "y yank"
-    Write-Host "x cut (yank and delete)"
-    Write-Host "p put"
-    Write-Host "`"<n>y store the yank in buffer n"
-    Write-Host "`"* is the special clipboard buffer" 
-
-    Write-Host "Macros"
-    Write-Host "q<n> start recording into buffer n"
-    Write-Host "@<n> replay recording in buffer n"
-
-    Write-Host "Working Directory"
-    Write-Host ":pwd display it"
-    Write-Host ":cd %:p:h set pwd to current files dir"
-
-    Write-Host ":noh turn off last search highlighting"
-    Write-Host ":source ~/.vimrc reload vimrc without restarting vim"
-    Write-Host "dab `"delete arounb brackets`", daB for around curly brackets, t for xml type tags, combinations with normal commands are as expected cib/yaB/dit/vat etc"
-    Write-Host ":earlier 15m :later n - revert the document to a time in the past (later moves it back forward)"
-    Write-Host ":.! ls - dump output from command into editor"
-    write-host
-    write-host "vim surround stuff:"
-    write-host "S<p class='important'> = surround selected text in Visual mode with <p class='important'>something selected</p>"
-    write-host "cs`"' change surrounding double quotes to single"
-    write-host "ds`" to remove quote delimiters"
-    write-host "ysiw[ = surround a word with [ word ]"
-    write-host "ysiw] = surround a word with [word]"
-
-    write-host "zg add word under cursor as good"
-    write-host "zw add word under cursor as bad"
-    write-host "z= suggestions"
-    write-host ";spellr repeat z= suggestion done for all matches in current window"
-
-    write-host "global commands:"
-    write-host ":g/function/z#.5 = see the context for every line that matches the pattern"
-
-    write-host "folding:"
-    write-host ":set foldmethod=indent then zM to totally fold, zR to totally unfold, zr to unfold 1 level, zm to fold 1 level"
-
-    write-host "csharp stuff"
 }
 
 Set-Alias echovim Echo-VimCommands
