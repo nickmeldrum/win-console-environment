@@ -34,8 +34,8 @@ filetype plugin indent on
 
 au GUIEnter * simalt ~x
 
-"let mapleader = ","
-"let g:mapleader = ","
+let mapleader = "\\"
+let g:mapleader = "\\"
 
 :command! -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 set diffopt+=vertical
@@ -96,6 +96,7 @@ let g:OmniSharp_selector_ui = 'ctrlp'
 autocmd! BufWritePost *.cs call OmniSharp#AddToProject()
 autocmd! CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
 
+
 autocmd! FileType cs nnoremap gd :OmniSharpGotoDefinition<cr>
 command! CsGotoDef OmniSharpGotoDefinition
 autocmd! FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<cr>
@@ -121,8 +122,6 @@ autocmd! FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
 autocmd! BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
 autocmd! BufEnter,TextChanged,InsertLeave *.js SyntasticCheck
 
-
-
 " turn off auto backing up - using google drive or git anyway right? :)
 set nobackup
 set noswapfile
@@ -137,9 +136,15 @@ set hidden
 " Open markdown files with Chrome.
 "autocmd BufEnter *.md exe 'noremap <F5> :!start chrome "%:p"<CR>'
 
+command! ReadProse set wrap | normal zR
+autocmd! BufEnter *.md ReadProse
+noremap <leader>p :ReadProse<cr>
+
 " allow spell check
 "set spell
 "set spelllang=en
+command! Spell set spell spelllang=en_gb
+command! SpellOff set nospell
 
 " so gf knows some files might not include the .js extension in the script
 set suffixesadd+=.js
@@ -197,7 +202,6 @@ set number
 
 " Enable syntax highlighting
 syntax enable
-filetype on
 au BufNewFile,BufRead *.cshtml set filetype=html
 au BufNewFile,BufRead *.ejs set filetype=html
 
@@ -302,6 +306,7 @@ command! RemoveBadNewLines :%s///g
 nmap <C-A> mzggvG
 
 function! DoPrettyXML()
+    return
   " save the filetype so we can restore it later
   let l:origft = &ft
   set ft=
@@ -350,16 +355,16 @@ function! s:RunShellCommand(cmdline)
   1
 endfunction
 
-command! Build Shell powershell build
-command! ReBuild Shell powershell rebuild
-command! BuildCollab Shell powershell buildcollab
-command! BuildCollabTests Shell powershell buildcollabtests
-command! BuildComment Shell powershell buildcomment
-command! BuildCommentTests Shell powershell buildcommenttests
-command! BuildCheck Shell powershell buildcheck
-command! BuildCheckTests Shell powershell buildchecktests
-command! BuildVer powershell buildver
-command! BuildVerTests powershell buildvertests
+command! Build Dispatch powershell build
+command! ReBuild Dispatch powershell rebuild
+command! BuildCollab Dispatch powershell buildcollab
+command! BuildCollabTests Dispatch powershell buildcollabtests
+command! BuildComment Dispatch powershell buildcomment
+command! BuildCommentTests Dispatch powershell buildcommenttests
+command! BuildCheck Dispatch powershell buildcheck
+command! BuildCheckTests Dispatch powershell buildchecktests
+command! BuildVer Dispatch powershell buildver
+command! BuildVerTests Dispatch powershell buildvertests
 
 command! DebugWeb Shell powershell debugweb
 command! DebugCollab Shell powershell debugcollab
@@ -367,17 +372,17 @@ command! DebugComment Shell powershell debugcomment
 command! DebugCheck Shell powershell debugcheck
 command! DebugVer Shell powershell debugver
 
-command! TestAll Shell powershell testall
-command! TestAllNoSeleniumOrPerf Shell powershell testall-exceptseleniumorperf
-command! TestCollab Shell powershell testcollab
-command! TestComment Shell powershell testcommand
-command! TestCheck Shell powershell testcheck
-command! TestVer Shell powershell testver
-command! TestDiff Shell powershell testdiff
+command! TestAll Dispatch powershell testall
+command! TestAllNoSeleniumOrPerf Dispatch powershell testall-exceptseleniumorperf
+command! TestCollab Dispatch powershell testcollab
+command! TestComment Dispatch powershell testcomment
+command! TestCheck Dispatch powershell testcheck
+command! TestVer Dispatch powershell testver
+command! TestDiff Dispatch powershell testdiff
 
-command! StartSS Shell powershell startss
-command! StopSS Shell powershell stopss
-command! ListSS Shell powershell listss
+command! StartSS Dispatch powershell startss
+command! StopSS Dispatch powershell stopss
+command! ListSS Dispatch powershell listss
 
 " nerdtree stuff
 " close vim if nerdtree only window left open
