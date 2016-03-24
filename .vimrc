@@ -119,8 +119,8 @@ autocmd! FileType cs nnoremap <C-K> :OmniSharpNavigateUp<cr>
 "navigate down by method/property/field
 autocmd! FileType cs nnoremap <C-J> :OmniSharpNavigateDown<cr>
 
-autocmd! BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-autocmd! BufEnter,TextChanged,InsertLeave *.js SyntasticCheck
+"autocmd! BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+"autocmd! BufEnter,TextChanged,InsertLeave *.js SyntasticCheck
 
 " turn off auto backing up - using google drive or git anyway right? :)
 set nobackup
