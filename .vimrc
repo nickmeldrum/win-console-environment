@@ -215,6 +215,11 @@ nnoremap ` '
 nnoremap ; :
 nnoremap : ;
 
+"nice scrolly remaps
+
+map <c-j> j<c-e>
+map <c-k> k<c-y>
+
 " when :vs the loaded file will show up on the right
 set splitright
 
@@ -258,6 +263,8 @@ colorscheme kolor
 
 inoremap jk <ESC>
 
+command! Spell set spell spelllang=en_gb
+
 " commands
 command! SsWeb cd D:\Prod\src\Web
 command! SsScripts cd D:\Prod\src\Web\scripts\Scribestar
@@ -294,19 +301,19 @@ endfunction
 "imports in js
 "cwimportf=vf(cfrom f)dl
 
-autocmd! BufWritePre *.js :call RemoveTrailingWhitespaceFromFile() | :call AutoIndentFile()
+"autocmd! BufWritePre *.js :call RemoveTrailingWhitespaceFromFile() | :call AutoIndentFile()
 
 command! MakeBig set guifont=Consolas:h18:cANSI
 command! MakeSmall set guifont=Consolas:h12:cANSI
 command! GL :diffget //2
 command! GR :diffget //3
 
-command! RemoveBadNewLines :%s///g
+command! RemoveBadNewLines :%s/
+//g
 
 nmap <C-A> mzggvG
 
 function! DoPrettyXML()
-    return
   " save the filetype so we can restore it later
   let l:origft = &ft
   set ft=
