@@ -308,8 +308,7 @@ command! MakeSmall set guifont=Consolas:h12:cANSI
 command! GL :diffget //2
 command! GR :diffget //3
 
-command! RemoveBadNewLines :%s/
-//g
+command! RemoveBadNewLines :%s///g
 
 nmap <C-A> mzggvG
 
