@@ -20,7 +20,7 @@ $repoRoot = (IfNull $localConfig.scribestarRepo "D:\Work\Product" $localConfig.s
 
 function SsRootDir { cd $repoRoot }
 function SsWebDir { cd "$($repoRoot)\src\Web" }
-function SsScriptsDir { cd "$($repoRoot)\src\Web\scripts\scribestar" }
+function SsScriptsDir { cd "$($repoRoot)\src\Web\Scripts\Scribestar" }
 function SsCSSDir { cd "$($repoRoot)\src\Web\sass" }
 function SsCollabDir { cd "$($repoRoot)\src\Collaboration" }
 function SsCollabTestsDir { cd "$($repoRoot)\src\Collaboration.Tests" }
@@ -30,7 +30,7 @@ function SsChecklistingDir { cd "$($repoRoot)\src\Checklisting" }
 function SsChecklistingTestsDir { cd "$($repoRoot)\src\Checklisting.Tests" }
 function SsVerificationDir { cd "$($repoRoot)\src\Verification" }
 function SsVerificationTestsDir { cd "$($repoRoot)\src\Verification.Tests" }
-function SsDiffDir { cd "$($repoRoot)\src\diff.service" }
+function SsDiffDir { cd "$($repoRoot)\src\Diff.Service" }
 function SsDiffTestsDir { cd "$($repoRoot)\src\Diff.Service.Tests" }
 
 #################################
@@ -55,6 +55,7 @@ function build { stopss; Run-MsBuild "Scribestar.sln" }
 function rebuild { stopss; Run-MsBuild "Scribestar.sln" "Rebuild" }
 function buildweb { Run-MsBuild "src\Web\Web.csproj" }
 function buildcollab { Run-MsBuild "src\Collaboration\Collaboration.csproj" }
+function buildsupport { Run-MsBuild "src\Support.Web\Support.Web.csproj" }
 function buildcollabtests { Run-MsBuild "src\Collaboration.Tests\Collaboration.Tests.csproj" }
 function buildcomment { Run-MsBuild "src\Commenting\Commenting.csproj" }
 function buildcommenttests { Run-MsBuild "src\Commenting.Tests\Commenting.Tests.csproj" }
@@ -62,6 +63,9 @@ function buildcheck { Run-MsBuild "src\Checklisting\Checklisting.csproj" }
 function buildchecktests { Run-MsBuild "src\Checklisting.Tests\Checklisting.Tests.csproj" }
 function buildver { Run-MsBuild "src\Verification\Verification.csproj" }
 function buildvertests { Run-MsBuild "src\Verification.Tests\Verification.Tests.csproj" }
+function buildcoretests { Run-MsBuild "src\Core.Tests\Core.Tests.csproj" }
+function buildscripts { SSWebDir; gulp scripts-debug }
+function buildcss { SSWebDir; gulp css-debug }
 
 #################################
 ### Debugging
@@ -226,6 +230,12 @@ function testcheck { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Check
 function testcomment { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Commenting") }
 function testver { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Verification") }
 function testdiff { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Diff") }
+function testcore { Run-Nunit (Get-AssemblyFromTestProjectFiles -include "Core") }
+
+function updatetable {
+    SSWebDir
+    gulp scripts-debug-one --script xopus-scribestar-readwrite
+}
 
 #################################
 ### Miscellaneous

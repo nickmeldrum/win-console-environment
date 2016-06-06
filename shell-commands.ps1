@@ -6,6 +6,10 @@ function Write-Title {
 	write-host $message -ForegroundColor cyan
 }
 
+function List-GithubRepos {
+    ((curl https://api.github.com/users/nickmeldrum/repos).Content | convertfrom-json) | select name
+}
+
 function fortune {
     [System.IO.File]::ReadAllText($localconfig.envrepo +'\fortune.txt') -replace "`r`n", "`n" -split "`n%`n" | Get-Random
 }

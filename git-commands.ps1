@@ -21,6 +21,10 @@ function Get-PrettyLog {
     git log -$length --pretty=format:'%C(yellow)%h %Cred%ad %C(yellow)%an%Cgreen%d %Creset%s' --date=short
 }
 
+function gitvimlog {
+    git log -10 --pretty=format:'%h %ad %an %d %s' --date=short
+}
+
 function Get-SpecificBlame {
     param (
         $file,
